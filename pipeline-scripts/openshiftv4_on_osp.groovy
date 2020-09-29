@@ -96,6 +96,7 @@ stage ('OCP 4.X INSTALL') {
 			def sleep_time = openshiftv4_properties['SLEEP_TIME']
 			def daemon_mode = openshiftv4_properties['DAEMON_MODE']
 			def kubeconfig_auth_dir_path = openshiftv4_properties['KUBECONFIG_AUTH_DIR_PATH']
+			def job_iterations = openshiftv4_properties['JOB_ITERATIONS']
 			
 			// Install cluster using the payload captured at the build trigger url when scale_ci_build_trigget is set
 			if ( scale_ci_build_trigger.toBoolean() ) {
@@ -112,7 +113,7 @@ stage ('OCP 4.X INSTALL') {
 			}
 
 			try {
-				openshiftv4_build = build job: 'ATS-SCALE-CI-TEST',
+				openshiftv4_build = build job: 'ATS-SCALE-CI-OCP-OSP-DEPLOY',
 				parameters: [  	[$class: 'StringParameterValue', name: 'ORCHESTRATION_USER', value: orchestration_user ],
 						[$class: 'StringParameterValue', name: 'ORCHESTRATION_HOST', value: orchestration_host ],
 						[$class: 'hudson.model.PasswordParameterValue', name: 'SSHKEY_TOKEN', value: sshkey_token ],
@@ -188,7 +189,8 @@ stage ('OCP 4.X INSTALL') {
 						[$class: 'StringParameterValue', name: 'ITERATIONS', value: iterations ],
 						[$class: 'StringParameterValue', name: 'SLEEP_TIME', value: sleep_time ],
 						[$class: 'BooleanParameterValue', name: 'DAEMON_MODE', value: daemon_mode ],
-						[$class: 'StringParameterValue', name: 'KUBECONFIG_AUTH_DIR_PATH', value: kubeconfig_auth_dir_path ]]
+						[$class: 'StringParameterValue', name: 'KUBECONFIG_AUTH_DIR_PATH', value: kubeconfig_auth_dir_path ],
+						[$class: 'StringParameterValue', name: 'JOB_ITERATIONS', value: job_iterations ]]
 			} catch ( Exception e) {
 				echo "ATS-SCALE-CI-OCP-OSP-DEPLOY Job failed with the following error: "
 				echo "${e.getMessage()}"
