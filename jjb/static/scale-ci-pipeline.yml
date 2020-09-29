@@ -121,7 +121,7 @@
       scm:
       - git:
           branches:
-          - '*fio'
+          - '*/master'
           url: https://github.com/innovation-sre/scale-ci-pipeline.git
           wipe-workspace: true
       script-path: Jenkinsfile

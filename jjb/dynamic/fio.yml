@@ -260,7 +260,7 @@
     scm:
     - git:
         branches:
-        - '*/fio'
+        - '*/master'
         url: https://github.com/innovation-sre/workloads.git
     triggers: []
     wrappers:
