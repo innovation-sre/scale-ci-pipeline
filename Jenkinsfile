@@ -3,6 +3,7 @@
 def contact = "nelluri@redhat.com"
 def tooling = TOOLING.toString().toUpperCase()
 def fio = FIO.toString().toUpperCase()
+def stress = STRESS.toString().toUpperCase()
 def run_conformance = CONFORMANCE.toString().toUpperCase()
 def nodevertical = NODEVERTICAL_SCALE_TEST.toString().toUpperCase()
 def mastervertical = MASTERVERTICAL_SCALE_TEST.toString().toUpperCase()
@@ -33,6 +34,10 @@ node (node_label) {
 
 	if (fio == "TRUE") {
 		load "pipeline-scripts/fio.groovy"
+	}
+
+	if (stress == "TRUE") {
+		load "pipeline-scripts/stress.groovy"
 	}
 
 	// stage to run conformance

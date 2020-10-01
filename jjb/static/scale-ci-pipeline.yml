@@ -14,6 +14,10 @@
         description: ''
         name: FIO
     - bool:
+        default: true
+        description: ''
+        name: STRESS
+    - bool:
         default: false
         description: ''
         name: CONFORMANCE

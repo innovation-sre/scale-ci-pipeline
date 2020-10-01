@@ -7,7 +7,7 @@ def property_file_name = "fio.properties"
 
 println "Current pipeline job build id is '${pipeline_id}'"
 
-// run nodevertical scale test
+// run fio test
 stage ('fio_scale_test') {
 	if (fio == "TRUE") {
 		currentBuild.result = "SUCCESS"

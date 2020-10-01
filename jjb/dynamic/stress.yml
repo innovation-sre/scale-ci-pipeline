@@ -24,20 +24,20 @@
 
         export ANSIBLE_FORCE_COLOR=true
         ansible --version
-        time ansible-playbook -vv -i inventory workloads/fio.yml
+        time ansible-playbook -vv -i inventory workloads/stress.yml
 
         # logging
         logs_counter=0
         logs_counter_limit=100
-        oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-storage-fio
+        oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-stress
         while true; do
           logs_counter=$((logs_counter+1))
-          if [[ $(oc get job -n scale-ci-tooling scale-ci-storage-fio -o json | jq -e '.status.active==1') == "true" ]]; then
+          if [[ $(oc get job -n scale-ci-tooling scale-ci-storage-stress -o json | jq -e '.status.active==1') == "true" ]]; then
             if [[ $logs_counter -le $logs_counter_limit ]]; then
               echo "=================================================================================================================================================================="
               echo "Attempt $logs_counter to reconnect and fetch the controller pod logs"
               echo "=================================================================================================================================================================="
-              oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-storage-fio
+              oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-storage-stress
             else
               echo "Exceeded the retry limit trying to get the controller logs: $logs_counter_limit, exiting."
               exit 1
@@ -49,13 +49,13 @@
         done
 
         # status
-        oc get job -n scale-ci-tooling scale-ci-storage-fio -o json | jq -e '.status.succeeded==1'
+        oc get job -n scale-ci-tooling scale-ci-storage-stress -o json | jq -e '.status.succeeded==1'
     concurrent: true
     description: |
-      FIO workload is used to measure disk thresholds remote storage volumes within OpenShift. This means FIO loads several storage volumesusing cluster loader.
+      Stress workload is used to measure cpu, memory and disk thresholds storage volumes within OpenShift.
       This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
-    name: ATS-SCALE-CI-FIO
+    name: ATS-SCALE-CI-STRESS
     node: scale-ci
     parameters:
     - string:
@@ -87,7 +87,7 @@
         description: The user for the Orchestration host.
         name: ORCHESTRATION_USER
     - string:
-        default: "quay.io/openshift-scale/scale-ci-workload"
+        default: "alexeiled/stress-ng"
         description: Container image that runs the workload script.
         name: WORKLOAD_IMAGE
     - bool:
@@ -135,86 +135,81 @@
         description: Number of retries for Ansible to poll if the workload job has completed.Poll attempts delay 10s between polls with some additional time taken for each polling action depending on the orchestration host setup. FIO I/O test for many pods and big file sizes can run for hours and either we rise 'JOB_COMPLETION_POLL_ATTEMPTS' to high value, or remove fully checking for 'JOB_COMPLETION_POLL_ATTEMPTS' for FIO I/O test.
         name: JOB_COMPLETION_POLL_ATTEMPTS
     - string:
-        default: "fiotest"
+        default: "stresstest"
         description: Prefix to use for FIO I/O test
-        name: FIOTEST_PREFIX
+        name: STRESS_PREFIX
+    - string:
+        default: 100
+        description: start N workers spinning on anonymous mmap
+        name: STRESS_MEM
+    - string:
+        default: '1G'
+        description: allocate N bytes per vm worker (default 256MB)
+        name: STRESS_MEM_BYTES
+    - string:
+        default: '--metrics-brief'
+        description: Additional arguments to ng-stress
+        name: STRESS_ADDITIONAL_ARGS
+    - string:
+        default: 100
+        description: start N workers spinning on sync()
+        name: STRESS_IO
+    - string:
+        default: 100
+        description: load CPU by P %, 0=sleep, 100=full load
+        name: STRESS_CPU_LOAD
+    - string:
+        default: 4
+        description: start N workers spinning on sqrt(rand())
+        name: STRESS_CPU
+    - string:
+        default: '60s'
+        description: timeout after T seconds
+        name: STRESS_RUNTIME
+    - string:
+        default: 'alexeiled/stress-ng'
+        description: pod image
+        name: STRESS_POD_IMAGE
+    - string:
+        default: 'alexeiled/stress-ng'
+        description: pod image
+        name: STRESS_CONTAINER_IMAGE
+    - string:
+        default: 5
+        description: start N workers creating multiple daemons
+        name: STRESS_DAEMONS
     - bool:
         default: true
         description: If set to 'true' test project will be removed at end of test.
-        name: FIOTEST_CLEANUP
+        name: STRESS_CLEANUP
     - string:
-        default: "fiotest"
+        default: "stresstest"
         description: "Basename used by cluster loader for the project(s) it creates."
-        name: FIOTEST_BASENAME
+        name: STRESS_BASENAME
     - string:
-        default: 1
-        description: Maximum number of Pods that FIO I/O test will create for test
-        name: FIOTEST_MAXPODS
-    - string:
-        default: "quay.io/openshift-scale/scale-ci-fio:latest"
-        description: Container image to use for FIO Pods
-        name: FIOTEST_POD_IMAGE
-    - string:
-        default: 60
-        description: Period of time (in seconds) for cluster loader to pause after creating pods and waiting for them to be running.
-        name: FIOTEST_PAUSE
-    - string:
-        default: 1
-        description: Number of Pods for cluster loader will create before waiting for Pods to become running.
-        name: FIOTEST_STEPSIZE
-    - string:
-        default: "2Gi"
-        description: FIOTEST_STORAGE_SIZE defines size of PVC which will be created and mounted to Pod. It is important to notice that this cannot be smaller than 'FIOTEST_FILESIZE'
-        name: FIOTEST_STORAGE_SIZE
-    - string:
-        default: ""
-        description: This parameter defines what storageclass to use to dynamically allocate PVC. It is expected that storage class is present and functional in order for test to work. Storage class name will be different and depends on environment, common storage class names are
-        name: FIOTEST_STORAGECLASS
-    - string:
-        default: "ReadWriteOnce"
-        description: FIOTEST_ACCESS_MODES is responsible for PVC access mode. This parameter will accept one of 'ReadWriteOnce' , 'ReadWriteMany' or 'ReadOnlyMany'. It is important to understand that particular access mode must be supported by storage used for test.
-        name: FIOTEST_ACCESS_MODES
-    - string:
-        default: 4
-        description: Fio block size.
-        name: FIOTEST_BS
-    - string:
-        default: "/mnt/pvcmount"
-        description: FIO file to write. PVC is mounted inside FIO pod to '/mnt/pvcmount' and thus inside this mount point fio file is created. This ensures that I/O operations are executed against PVC.
-        name: FIOTEST_FILENAME
-    - string:
-        default: "1GB"
-        description: FIO file size and its size cannot exceed 'FIOTEST_STORAGE_SIZE'.
-        name: FIOTEST_FILESIZE
-    - bool:
-        default: true
-        description: From 'man fio' - If  value  is  true,  use  non-buffered  I/O. This is usually O_DIRECT.
-        name: FIOTEST_DIRECT
-    - string:
-        default: 60
+        default: 60s
         description: FIO test runtime
-        name: FIOTEST_RUNTIME
-    - string:
-        default: 4
-        description: Number of I/O units to keep in flight  against  the  file
-        name: FIOTEST_IODEPTH
+        name: STRESS_RUNTIME
     - string:
         default: 2
         description: Number of nodes to test FIO on
-        name: FIOTEST_MAX_NODES
-    - string:
-        default: "read"
-        description: "FIO test type to execute. Default is 'read', supported are : read,write,randread,randwrite,randrw,rw"
-        name: FIOTEST_TESTTYPE
-    - string:
-        default: 1
-        description: Running one iteration of test can give misleading results, and it is recommended to run multiple iterations to catch up deviations and anomalies. Test result will show best iteration.
-        name: FIOTEST_SAMPLES
+        name: STRESS_MAX_NODES
     - string:
         default: ""
         description: For cases when it is necessary to have FIO pods to be assigned to already labeled nodes with specific label 'FIOTEST_NODESELECTOR' allows to specify desired label. FIO I/O test does not label nodes, it expect that labels are already assigned to nodes.
-        name: FIOTEST_NODESELECTOR
-
+        name: STRESS_NODESELECTOR
+    - string:
+        default: ""
+        description: Description for the test case
+        name: STRESS_DESCRIPTION
+    - string:
+        default: 50
+        description: Step size
+        name: STRESS_STEPSIZE
+    - string:
+        default: 60
+        description: Pause between steps
+        name: STRESS_PAUSE
     project-type: freestyle
     properties:
     - raw:
