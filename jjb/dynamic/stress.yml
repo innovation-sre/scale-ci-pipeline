@@ -32,12 +32,12 @@
         oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-stress
         while true; do
           logs_counter=$((logs_counter+1))
-          if [[ $(oc get job -n scale-ci-tooling scale-ci-storage-stress -o json | jq -e '.status.active==1') == "true" ]]; then
+          if [[ $(oc get job -n scale-ci-tooling scale-ci-stress -o json | jq -e '.status.active==1') == "true" ]]; then
             if [[ $logs_counter -le $logs_counter_limit ]]; then
               echo "=================================================================================================================================================================="
               echo "Attempt $logs_counter to reconnect and fetch the controller pod logs"
               echo "=================================================================================================================================================================="
-              oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-storage-stress
+              oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-stress
             else
               echo "Exceeded the retry limit trying to get the controller logs: $logs_counter_limit, exiting."
               exit 1
@@ -49,7 +49,7 @@
         done
 
         # status
-        oc get job -n scale-ci-tooling scale-ci-storage-stress -o json | jq -e '.status.succeeded==1'
+        oc get job -n scale-ci-tooling scale-ci-stress -o json | jq -e ".status.succeeded==1"
     concurrent: true
     description: |
       Stress workload is used to measure cpu, memory and disk thresholds storage volumes within OpenShift.

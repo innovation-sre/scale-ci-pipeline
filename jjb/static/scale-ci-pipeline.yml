@@ -78,6 +78,10 @@
         description: ''
         name: FIO_PROPERTY_FILE
     - string:
+        default: '${WORKSPACE}/properties-files/stress.properties'
+        description: ''
+        name: STRESS_PROPERTY_FILE
+    - string:
         default: ''
         description: ''
         name: CONFORMANCE_PROPERTY_FILE

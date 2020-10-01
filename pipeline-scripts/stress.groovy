@@ -51,6 +51,7 @@ stage ('stress_scale_test') {
 			def stress_runtime = stress_properties['STRESS_RUNTIME']
 			def stress_nodeselector = stress_properties['STRESS_NODESELECTOR']
 			def stress_cpu = stress_properties['STRESS_CPU']
+			def stress_cpu_load = stress_properties['STRESS_CPU_LOAD']
 			def stress_io = stress_properties['STRESS_IO']
 			def stress_mem = stress_properties['STRESS_MEM']
 			def stress_daemons = stress_properties['STRESS_DAEMONS']
@@ -88,6 +89,7 @@ stage ('stress_scale_test') {
 				[$class: 'StringParameterValue', name: 'STRESS_CONTAINER_IMAGE', value: stress_container_image],
 				[$class: 'StringParameterValue', name: 'STRESS_RUNTIME', value: stress_runtime],
 				[$class: 'StringParameterValue', name: 'STRESS_CPU', value: stress_cpu],
+				[$class: 'StringParameterValue', name: 'STRESS_CPU_LOAD', value: stress_cpu_load],
 				[$class: 'StringParameterValue', name: 'STRESS_IO', value: stress_io],
 				[$class: 'StringParameterValue', name: 'STRESS_MEM', value: stress_mem],
 				[$class: 'StringParameterValue', name: 'STRESS_DAEMONS', value: stress_daemons],
