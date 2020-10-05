@@ -18,9 +18,14 @@ stage('mastervertical_scale_test') {
 				sh "rm ${property_file_name}"
 			}
 			// get properties file
-			sh "wget ${MASTERVERTICAL_PROPERTY_FILE} -O ${property_file_name}"
-                        sh "cat ${property_file_name}"
-			def mastervertical_properties = readProperties file: property_file_name
+//			sh "wget ${MASTERVERTICAL_PROPERTY_FILE} -O ${property_file_name}"
+//			sh "cat ${property_file_name}"
+
+			echo "Root Workspace: ${env.ROOT_WORKSPACE}"
+			echo "Properties Prefix: ${env.PROPERTIES_PREFIX}"
+			println "Current pipeline job build id is '${pipeline_id}'"
+			def mastervertical_properties = readProperties file: "${env.PROPERTIES_PREFIX}/${property_file_name}"
+
 			def sshkey_token = mastervertical_properties['SSHKEY_TOKEN']
 			def orchestration_host = mastervertical_properties['ORCHESTRATION_HOST']
 			def orchestration_user = mastervertical_properties['ORCHESTRATION_USER']

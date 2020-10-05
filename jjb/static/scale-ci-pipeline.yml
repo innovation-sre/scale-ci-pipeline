@@ -78,41 +78,41 @@
         description: ''
         name: FIO_PROPERTY_FILE
     - string:
+        default: '${WORKSPACE}/properties-files/http.properties'
+        description: ''
+        name: HTTP_TEST_PROPERTY_FILE
+    - string:
         default: '${WORKSPACE}/properties-files/stress.properties'
         description: ''
         name: STRESS_PROPERTY_FILE
     - string:
-        default: ''
+        default: '${WORKSPACE}/properties-files/conformance.properties'
         description: ''
         name: CONFORMANCE_PROPERTY_FILE
     - string:
-        default: ''
+        default: '${WORKSPACE}/properties-files/nodevertical.properties'
         description: ''
         name: NODEVERTICAL_PROPERTY_FILE
     - string:
-        default: ''
+        default: '${WORKSPACE}/properties-files/deployments_per_ns.properties'
         description: ''
-        name: HTTP_TEST_PROPERTY_FILE
+        name: DEPLOYMENTS_PER_NS_PROPERTY_FILE
     - string:
-        default: ''
+        default: '${WORKSPACE}/properties-files/podvertical.properties'
+        description: ''
+        name: PODVERTICAL_PROPERTY_FILE
+    - string:
+        default: '${WORKSPACE}/properties-files/mastervertical.properties'
+        description: ''
+        name: MASTERVERTICAL_PROPERTY_FILE
+    - string:
+        default: '${WORKSPACE}/properties-files/services_per_namespace.properties'
         description: ''
         name: SERVICES_PER_NAMESPACE_PROPERTY_FILE
     - string:
         default: ''
         description: ''
-        name: DEPLOYMENTS_PER_NS_PROPERTY_FILE
-    - string:
-        default: ''
-        description: ''
-        name: PODVERTICAL_PROPERTY_FILE
-    - string:
-        default: ''
-        description: ''
         name: NETWORKING_PROPERTY_FILE
-    - string:
-        default: ''
-        description: ''
-        name: MASTERVERTICAL_PROPERTY_FILE
     - string:
         default: ''
         description: ''

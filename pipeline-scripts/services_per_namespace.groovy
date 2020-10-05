@@ -18,9 +18,14 @@ stage ('ATS-SCALE-CI-SERVICES-PER-NAMESPACE') {
 				sh "rm ${property_file_name}"
 			}
 			// get properties file
-			sh "wget ${SERVICES_PER_NAMESPACE_PROPERTY_FILE} -O ${property_file_name}"
-			sh "cat ${property_file_name}"
-			def services_per_namespace_properties = readProperties file: property_file_name
+//			sh "wget ${SERVICES_PER_NAMESPACE_PROPERTY_FILE} -O ${property_file_name}"
+//			sh "cat ${property_file_name}"
+
+			echo "Root Workspace: ${env.ROOT_WORKSPACE}"
+			echo "Properties Prefix: ${env.PROPERTIES_PREFIX}"
+			println "Current pipeline job build id is '${pipeline_id}'"
+			sh "cat ${env.PROPERTIES_PREFIX}/${property_file_name}"
+			def services_per_namespace_properties = readProperties file: "${env.PROPERTIES_PREFIX}/${property_file_name}"
 			def sshkey_token = services_per_namespace_properties['SSHKEY_TOKEN']
 			def orchestration_host = services_per_namespace_properties['ORCHESTRATION_HOST']
 			def orchestration_user = services_per_namespace_properties['ORCHESTRATION_USER']

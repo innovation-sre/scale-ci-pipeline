@@ -18,9 +18,15 @@ stage ('podvertical_scale_test') {
 				sh "rm ${property_file_name}"
 			}
 			// get properties file
-			sh "wget ${PODVERTICAL_PROPERTY_FILE} -O ${property_file_name}"
-			sh "cat ${property_file_name}"
-			def podvertical_properties = readProperties file: property_file_name
+//			sh "wget ${PODVERTICAL_PROPERTY_FILE} -O ${property_file_name}"
+//			sh "cat ${property_file_name}"
+
+			echo "Root Workspace: ${env.ROOT_WORKSPACE}"
+			echo "Properties Prefix: ${env.PROPERTIES_PREFIX}"
+			println "Current pipeline job build id is '${pipeline_id}'"
+			sh "cat ${env.PROPERTIES_PREFIX}/${property_file_name}"
+			def podvertical_properties = readProperties file: "${env.PROPERTIES_PREFIX}/${property_file_name}"
+
 			def sshkey_token = podvertical_properties['SSHKEY_TOKEN']
 			def orchestration_host = podvertical_properties['ORCHESTRATION_HOST']
 			def orchestration_user = podvertical_properties['ORCHESTRATION_USER']
