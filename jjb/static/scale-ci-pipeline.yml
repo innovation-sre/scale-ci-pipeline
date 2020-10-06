@@ -18,6 +18,10 @@
         description: ''
         name: STRESS
     - bool:
+        default: true
+        description: ''
+        name: HPA
+    - bool:
         default: false
         description: ''
         name: CONFORMANCE
@@ -85,6 +89,11 @@
         default: '${WORKSPACE}/properties-files/stress.properties'
         description: ''
         name: STRESS_PROPERTY_FILE
+    - string:
+        default: '${WORKSPACE}/properties-files/hpa.properties'
+        description: ''
+        name: HPA_PROPERTY_FILE
+
     - string:
         default: '${WORKSPACE}/properties-files/conformance.properties'
         description: ''

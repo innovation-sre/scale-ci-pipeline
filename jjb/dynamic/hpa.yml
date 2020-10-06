@@ -1,0 +1,269 @@
+- job:
+    block-downstream: false
+    block-upstream: false
+    builders:
+    - shell: |+
+        set -o pipefail
+        set -eux
+        env
+        # get perf keys to access orchestration host and set ssh session options
+        git clone https://${SSHKEY_TOKEN}@github.com/innovation-sre/orchestration-host.git
+        export PUBLIC_KEY=${WORKSPACE}/orchestration-host/ssh_keys/id_rsa.pub
+        export PRIVATE_KEY=${WORKSPACE}/orchestration-host/ssh_keys/id_rsa
+        export OPTIONS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=1200"
+        chmod 600 ${PRIVATE_KEY}
+
+        # fetch the kubeconfig from the orchestration host
+        echo "Fetching the  kubeconfig from the orchestration host"
+        scp ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST}:${KUBECONFIG_FILE} ${WORKSPACE}/kubeconfig
+        export KUBECONFIG=${WORKSPACE}/kubeconfig
+
+        # Create inventory File:
+        echo "[orchestration]" > inventory
+        echo "${ORCHESTRATION_HOST}" >> inventory
+
+        export ANSIBLE_FORCE_COLOR=true
+        ansible --version
+        time ansible-playbook -vv -i inventory workloads/hpa.yml
+
+        # logging
+        logs_counter=0
+        logs_counter_limit=100
+        oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-stress
+        while true; do
+          logs_counter=$((logs_counter+1))
+          if [[ $(oc get job -n scale-ci-tooling scale-ci-stress -o json | jq -e '.status.active==1') == "true" ]]; then
+            if [[ $logs_counter -le $logs_counter_limit ]]; then
+              echo "=================================================================================================================================================================="
+              echo "Attempt $logs_counter to reconnect and fetch the controller pod logs"
+              echo "=================================================================================================================================================================="
+              oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-stress
+            else
+              echo "Exceeded the retry limit trying to get the controller logs: $logs_counter_limit, exiting."
+              exit 1
+            fi
+          else
+            echo "Job completed"
+            break
+          fi
+        done
+
+        # status
+        oc get job -n scale-ci-tooling scale-ci-stress -o json | jq -e ".status.succeeded==1"
+    concurrent: true
+    description: |
+      HPA (horizontal pod autoscaler) workload is used to test the scalability of pods with high resource demand within OpenShift. Specifically CPU and Memory.
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
+    disabled: false
+    name: ATS-SCALE-CI-HPA
+    node: scale-ci
+    parameters:
+    - string:
+        default: ''
+        description: this is a var to help idenfity cluster loaders results.
+        name: SNAFU_USER
+    - string:
+        default: ''
+        description: cluster name is a var to help idenfity cluster loaders results.(defaults to clustername found in machinset label)
+        name: SNAFU_CLUSTER_NAME
+    - string:
+        default: ''
+        description: Elasticsearch server host address (currently used by snafu), set to index results from cluster loader
+        name: ES_HOST
+    - string:
+        default: ''
+        description: Elasticsearch server port (currently used by snafu), set to index results from cluster loader
+        name: ES_PORT
+    - string:
+        default: ''
+        description: Elasticsearch server index prefix (currently used by snafu). (defaults to snafu through the workloads repo)
+        name: ES_INDEX_PREFIX
+    - string:
+        default: ""
+        description: The machine intended to run the oc commands and launch the workload.
+        name: ORCHESTRATION_HOST
+    - string:
+        default: "root"
+        description: The user for the Orchestration host.
+        name: ORCHESTRATION_USER
+    - string:
+        default: "alexeiled/stress-ng"
+        description: Container image that runs the workload script.
+        name: WORKLOAD_IMAGE
+    - bool:
+        default: false
+        description: Enables/disables the node selector that places the workload job on the 'pbench' node.
+        name: WORKLOAD_JOB_NODE_SELECTOR
+    - bool:
+        default: false
+        description: Enables/disables the toleration on the workload job to permit the 'controller' taint.
+        name: WORKLOAD_JOB_TAINT
+    - bool:
+        default: false
+        description: Enables/disables running the workload pod as privileged.
+        name: WORKLOAD_JOB_PRIVILEGED
+    - string:
+        default: "/root/.kube/config"
+        description: Location(absolute path) of kubeconfig on orchestration host.
+        name: KUBECONFIG_FILE
+    - bool:
+        default: false
+        description: Enables/disables the collection of pbench data on the pbench agent pods. These pods are deployed by the tooling playbook.
+        name: ENABLE_PBENCH_AGENTS
+    - bool:
+        default: false
+        description: Enables/disables the copying of pbench data to a remote results server for further analysis.
+        name: ENABLE_PBENCH_COPY
+    - string:
+        default: ""
+        description: DNS address of the pbench results server.
+        name: PBENCH_SERVER
+    - string:
+        default: "~/.ssh/id_rsa"
+        description: Location of ssh private key to authenticate to the pbench results server.
+        name: PBENCH_SSH_PRIVATE_KEY_FILE
+    - string:
+        default: "~/.ssh/id_rsa.pub"
+        description: Location of the ssh public key to authenticate to the pbench results server.
+        name: PBENCH_SSH_PUBLIC_KEY_FILE
+    - string:
+        default: ""
+        description: Future use for pbench and prometheus scraper to place results into git repo that holds results data.
+        name: SCALE_CI_RESULTS_TOKEN
+    - string:
+        default: 10000
+        description: Number of retries for Ansible to poll if the workload job has completed.Poll attempts delay 10s between polls with some additional time taken for each polling action depending on the orchestration host setup. FIO I/O test for many pods and big file sizes can run for hours and either we rise 'JOB_COMPLETION_POLL_ATTEMPTS' to high value, or remove fully checking for 'JOB_COMPLETION_POLL_ATTEMPTS' for FIO I/O test.
+        name: JOB_COMPLETION_POLL_ATTEMPTS
+    - string:
+        default: "stresstest"
+        description: Prefix to use for FIO I/O test
+        name: STRESS_PREFIX
+    - string:
+        default: 100
+        description: start N workers spinning on anonymous mmap
+        name: STRESS_MEM
+    - string:
+        default: '1G'
+        description: allocate N bytes per vm worker (default 256MB)
+        name: STRESS_MEM_BYTES
+    - string:
+        default: '--metrics-brief'
+        description: Additional arguments to ng-stress
+        name: STRESS_ADDITIONAL_ARGS
+    - string:
+        default: 100
+        description: start N workers spinning on sync()
+        name: STRESS_IO
+    - string:
+        default: 100
+        description: load CPU by P %, 0=sleep, 100=full load
+        name: STRESS_CPU_LOAD
+    - string:
+        default: 4
+        description: start N workers spinning on sqrt(rand())
+        name: STRESS_CPU
+    - string:
+        default: '60s'
+        description: timeout after T seconds
+        name: STRESS_RUNTIME
+    - string:
+        default: 'alexeiled/stress-ng'
+        description: pod image
+        name: STRESS_POD_IMAGE
+    - string:
+        default: 'alexeiled/stress-ng'
+        description: pod image
+        name: STRESS_CONTAINER_IMAGE
+    - string:
+        default: 5
+        description: start N workers creating multiple daemons
+        name: STRESS_DAEMONS
+    - bool:
+        default: true
+        description: If set to 'true' test project will be removed at end of test.
+        name: STRESS_CLEANUP
+    - string:
+        default: "stresstest"
+        description: "Basename used by cluster loader for the project(s) it creates."
+        name: STRESS_BASENAME
+    - string:
+        default: 60s
+        description: FIO test runtime
+        name: STRESS_RUNTIME
+    - string:
+        default: 2
+        description: Number of nodes to test FIO on
+        name: STRESS_MAX_NODES
+    - string:
+        default: ""
+        description: For cases when it is necessary to have FIO pods to be assigned to already labeled nodes with specific label 'FIOTEST_NODESELECTOR' allows to specify desired label. FIO I/O test does not label nodes, it expect that labels are already assigned to nodes.
+        name: STRESS_NODESELECTOR
+    - string:
+        default: ""
+        description: Description for the test case
+        name: STRESS_DESCRIPTION
+    - string:
+        default: 50
+        description: Step size
+        name: STRESS_STEPSIZE
+    - string:
+        default: 60
+        description: Pause between steps
+        name: STRESS_PAUSE
+    project-type: freestyle
+    properties:
+    - raw:
+        xml: |
+          <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28" />
+    - raw:
+        xml: |
+          <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.3">
+          <gitLabConnection />
+          </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+    - raw:
+        xml: |
+          <org.jenkinsci.plugins.ZMQEventPublisher.HudsonNotificationProperty plugin="zmq-event-publisher@0.0.5">
+          <enabled>false</enabled>
+          </org.jenkinsci.plugins.ZMQEventPublisher.HudsonNotificationProperty>
+    - raw:
+        xml: |
+          <com.synopsys.arc.jenkins.plugins.ownership.jobs.JobOwnerJobProperty plugin="ownership@0.11.0">
+          <ownership>
+          <ownershipEnabled>true</ownershipEnabled>
+          <primaryOwnerId>nelluri</primaryOwnerId>
+          <coownersIds class="sorted-set" />
+          </ownership>
+          </com.synopsys.arc.jenkins.plugins.ownership.jobs.JobOwnerJobProperty>
+    - raw:
+        xml: |
+          <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.27">
+          <autoRebuild>false</autoRebuild>
+          <rebuildDisabled>false</rebuildDisabled>
+          </com.sonyericsson.rebuild.RebuildSettings>
+    - raw:
+        xml: |
+          <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@2.0.1">
+          <maxConcurrentPerNode>0</maxConcurrentPerNode>
+          <maxConcurrentTotal>0</maxConcurrentTotal>
+          <categories class="java.util.concurrent.CopyOnWriteArrayList" />
+          <throttleEnabled>false</throttleEnabled>
+          <throttleOption>project</throttleOption>
+          <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
+          <paramsToUseForLimit />
+          </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+    publishers: []
+    scm:
+    - git:
+        branches:
+        - '*/master'
+        url: https://github.com/innovation-sre/workloads.git
+    triggers: []
+    wrappers:
+    - workspace-cleanup:
+        dirmatch: false
+    - ansicolor:
+        colormap: xterm
+    - credentials-binding:
+          - text:
+                credential-id: SSHKEY_TOKEN
+                variable: SSHKEY_TOKEN

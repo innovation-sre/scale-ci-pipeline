@@ -36,8 +36,14 @@ node (node_label) {
 		load "pipeline-scripts/fio.groovy"
 	}
 
+	// stage to run node stress test
 	if (stress == "TRUE") {
 		load "pipeline-scripts/stress.groovy"
+	}
+
+	// stage to run hpa scalability test
+	if (hpa == "TRUE") {
+		load "pipeline-scripts/hpa.groovy"
 	}
 
 	// stage to run conformance
