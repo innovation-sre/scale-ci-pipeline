@@ -69,6 +69,26 @@
         default: 'scale-ci'
         description: ''
         name: NODE_LABEL
+    - bool:
+        default: false
+        description: ''
+        name: PIPELINE
+    - bool:
+        default: false
+        description: 'Login to a specific cluster on the orchestration host'
+        name: LOGIN
+    - string:
+        default: ''
+        description: 'Temporary token to login to the cluster'
+        name: TOKEN
+    - string:
+        default: ''
+        description: 'Control Plane API URL. For example https://console.c1-ocp-gcc.fg.rbc.com/, https://console.c1-ocp-dc1.saifg.rbc.com'
+        name: API_URL
+    - string:
+        default: ''
+        description: ''
+        name: ORCHESTRATION_HOST
     - string:
         default: '${WORKSPACE}/properties-files/tooling.properties'
         description: ''
@@ -124,10 +144,6 @@
     - string:
         default: ''
         name: KRAKEN_PROPERTY_FILE
-    - bool:
-        default: false
-        description: ''
-        name: PIPELINE
     pipeline-scm:
       lightweight-checkout: false
       scm:
@@ -179,3 +195,10 @@
           </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
     triggers:
     - timed: '0 10 * * 1,3,5'
+    wrappers:
+        - credentials-binding:
+              - ssh-user-private-key:
+                    credential-id: ORCHESTRATION_HOST
+                    key-file-variable: PRIVATE_KEY
+                    username-variable: ORCHESTRATION_USER
+

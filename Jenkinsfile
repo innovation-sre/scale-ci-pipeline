@@ -18,6 +18,26 @@ def node_label = NODE_LABEL.toString()
 def run_uperf = UPERF.toString().toUpperCase()
 node (node_label) {
 	// setup the repo containing the pipeline scripts
+	stage('login to cluster') {
+		if (TOKEN?.trim() && URL?.trim()) {
+			try {
+				sh """
+				export OPTIONS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=1200"
+				chmod 600 ${PRIVATE_KEY}
+		
+				# fetch the kubeconfig from the orchestration host
+				echo "Fetching the kubeconfig from the orchestration host"
+				
+				ssh ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST} oc login ${URL} --token=${TOKEN}
+				"""
+			}
+			catch (exc) {
+				echo 'Error occurred during login command.'
+				throw exc
+			}
+		}
+	}
+
 	stage('cloning pipeline repo') {
 		checkout scm
 		env.ROOT_WORKSPACE = "${env.WORKSPACE}"
@@ -25,8 +45,6 @@ node (node_label) {
 		echo "Root Workspace: ${env.ROOT_WORKSPACE}"
 		echo "Properties Prefix: ${env.PROPERTIES_PREFIX}"
 	}
-
-
 	// stage to setup pbench
 	if (tooling == "TRUE") {
 		load "pipeline-scripts/tooling.groovy"
