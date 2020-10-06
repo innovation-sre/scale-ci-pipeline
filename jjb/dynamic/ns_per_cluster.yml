@@ -5,14 +5,17 @@
     - shell: |+
         set -e
 
-        if [[ ! -d "${WORKSPACE}/perf-dept" ]]; then
-        git clone https://${GITHUB_TOKEN}@github.com/redhat-performance/perf-dept.git
-        fi
-        export PRIVATE_KEY=${WORKSPACE}/perf-dept/ssh_keys/id_rsa_pbench_ec2
+        # get perf keys to access orchestration host and set ssh session options
+        export PUBLIC_KEY=${WORKSPACE}/id_rsa.pub
+        ssh-keygen -y -f ${PRIVATE_KEY} > $PUBLIC_KEY
         chmod 600 ${PRIVATE_KEY}
         export OPTIONS="-o StrictHostKeyChecking=no -o ServerAliveInterval=1 -o ConnectionAttempts=100"
         export KUBECONFIG="/root/.kube/config"
 
+        # login to the cluster
+        if [[ -n ${TOKEN} && -n ${API_URL} ]]; then
+          ssh ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST} oc login ${API_URL} --token=${TOKEN}
+        fi
 
         if [[ "${USE_PROXY}" == "true" ]]; then
         ssh ${OPTIONS} -o ProxyCommand="ssh -i ${PRIVATE_KEY} -W %h:%p ${PROXY_USER}@${PROXY_HOST}" -i ${PRIVATE_KEY} ${USER}@${JUMP_HOST} 'bash -s' <<ENDSSH
@@ -134,6 +137,14 @@
         default: ''
         description: CI or FULL
         name: MODE
+    - string:
+        default: ''
+        description: 'Temporary token to login to the cluster'
+        name: TOKEN
+    - string:
+        default: ''
+        description: 'Control Plane API URL. For example https://console.c1-ocp-gcc.fg.rbc.com/, https://console.c1-ocp-dc1.saifg.rbc.com'
+        name: API_URL
     project-type: freestyle
     properties:
     - raw:
@@ -180,3 +191,8 @@
     wrappers:
     - ansicolor:
         colormap: xterm
+    - credentials-binding:
+          - ssh-user-private-key:
+                credential-id: ORCHESTRATION_HOST
+                key-file-variable: PRIVATE_KEY
+                username-variable: ORCHESTRATION_USER
