@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def stress = STRESS.toString().toUpperCase()
 def property_file_name = "stress.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run stress  test
@@ -98,7 +99,10 @@ stage ('stress_scale_test') {
 				[$class: 'StringParameterValue', name: 'STRESS_STEPSIZE', value: stress_stepsize],
 				[$class: 'StringParameterValue', name: 'STRESS_PAUSE', value: stress_pause],
 				[$class: 'StringParameterValue', name: 'STRESS_DESCRIPTION', value: stress_description],
-				[$class: 'StringParameterValue', name: 'STRESS_NODESELECTOR', value: stress_nodeselector]]
+				[$class: 'StringParameterValue', name: 'STRESS_NODESELECTOR', value: stress_nodeselector],
+				[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+				[$class: 'StringParameterValue', name: 'API_URL', value: api_url],
+				]
 
 			} catch ( Exception e) {
 				echo "ATS-SCALE-CI-STRESS Job failed with the following error: "

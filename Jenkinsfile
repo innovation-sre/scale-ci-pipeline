@@ -19,28 +19,6 @@ def run_uperf = UPERF.toString().toUpperCase()
 def token = TOKEN.toString()
 def url = API_URL.toString()
 node (node_label) {
-	// setup the repo containing the pipeline scripts
-	stage('login to cluster') {
-		if (token?.trim() && url?.trim()) {
-			sh "env"
-			try {
-				sh """
-				export OPTIONS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=1200"
-				chmod 600 ${PRIVATE_KEY}
-		
-				# fetch the kubeconfig from the orchestration host
-				echo "Fetching the kubeconfig from the orchestration host"
-				
-				ssh ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST} oc login ${URL} --token=${TOKEN}
-				"""
-			}
-			catch (exc) {
-				echo 'Error occurred during login command.'
-				throw exc
-			}
-		}
-	}
-
 	stage('cloning pipeline repo') {
 		checkout scm
 		env.ROOT_WORKSPACE = "${env.WORKSPACE}"
