@@ -124,6 +124,10 @@
     - string:
         default: ''
         name: KRAKEN_PROPERTY_FILE
+    - bool:
+        default: false
+        description: ''
+        name: PIPELINE
     pipeline-scm:
       lightweight-checkout: false
       scm:
