@@ -16,10 +16,13 @@ def networking = NETWORKING.toString().toUpperCase()
 def kraken = KRAKEN.toString().toUpperCase()
 def node_label = NODE_LABEL.toString()
 def run_uperf = UPERF.toString().toUpperCase()
+def token = TOKEN.toString()
+def url = API_URL.toString()
 node (node_label) {
 	// setup the repo containing the pipeline scripts
 	stage('login to cluster') {
-		if (TOKEN?.trim() && URL?.trim()) {
+		if (token?.trim() && url?.trim()) {
+			sh "env"
 			try {
 				sh """
 				export OPTIONS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=1200"
