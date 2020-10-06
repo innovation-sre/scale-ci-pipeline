@@ -31,10 +31,6 @@
     parameters:
     - string:
         default: ""
-        description: Token to access private repo containing ssh keys.
-        name: SSHKEY_TOKEN
-    - string:
-        default: ""
         description: The machine intended to run the oc commands and launch the workload.
         name: ORCHESTRATION_HOST
     - string:
@@ -274,3 +270,7 @@
         dirmatch: false
     - ansicolor:
         colormap: xterm
+    - credentials-binding:
+          - text:
+                credential-id: SSHKEY_TOKEN
+                variable: SSHKEY_TOKEN
