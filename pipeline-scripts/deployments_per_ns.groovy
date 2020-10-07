@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def deployments_per_ns = DEPLOYMENTS_PER_NS.toString().toUpperCase()
 def property_file_name = "deployments_per_ns.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run deployments_per_ns scale test
@@ -88,7 +89,9 @@ stage ('deployments_per_ns_scale_test') {
 						[$class: 'StringParameterValue', name: 'ES_HOST', value: es_host ],
 						[$class: 'StringParameterValue', name: 'ES_PORT', value: es_port ],
 						[$class: 'StringParameterValue', name: 'ES_INDEX_PREFIX', value: es_index_prefix ],
-						[$class: 'StringParameterValue', name: 'DEPLOYMENTS_PER_NS_POD_IMAGE', value: deployments_per_ns_pod_image ]]
+						[$class: 'StringParameterValue', name: 'DEPLOYMENTS_PER_NS_POD_IMAGE', value: deployments_per_ns_pod_image ],
+						[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+						[$class: 'StringParameterValue', name: 'API_URL', value: api_url]]
 			} catch ( Exception e) {
 				echo "DEPLOYMENTS_PER_NS Job failed with the following error: "
 				echo "${e.getMessage()}"

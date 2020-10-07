@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def fio = FIO.toString().toUpperCase()
 def property_file_name = "fio.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run fio test
@@ -103,7 +104,10 @@ stage ('fio_scale_test') {
 				[$class: 'StringParameterValue', name: 'FIOTEST_IODEPTH', value: fiotest_iodepth],
 				[$class: 'StringParameterValue', name: 'FIOTEST_TESTTYPE', value: fiotest_testtype],
 				[$class: 'StringParameterValue', name: 'FIOTEST_SAMPLES', value: fiotest_samples],
-				[$class: 'StringParameterValue', name: 'FIOTEST_NODESELECTOR', value: fiotest_nodeselector]]
+				[$class: 'StringParameterValue', name: 'FIOTEST_NODESELECTOR', value: fiotest_nodeselector],
+				[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+				[$class: 'StringParameterValue', name: 'API_URL', value: api_url]
+				]
 
 			} catch ( Exception e) {
 				echo "ATS-SCALE-CI-FIO Job failed with the following error: "

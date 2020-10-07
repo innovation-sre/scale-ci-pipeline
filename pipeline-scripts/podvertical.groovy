@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def podvertical = PODVERTICAL.toString().toUpperCase()
 def property_file_name = "podvertical.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run podvertical scale test
@@ -95,7 +96,10 @@ stage ('podvertical_scale_test') {
 						[$class: 'StringParameterValue', name: 'ES_HOST', value: es_host ],
 						[$class: 'StringParameterValue', name: 'ES_PORT', value: es_port ],
 						[$class: 'StringParameterValue', name: 'ES_INDEX_PREFIX', value: es_index_prefix ],
-						[$class: 'StringParameterValue', name: 'EXPECTED_PODVERTICAL_DURATION', value: expected_podvertical_duration ]]
+						[$class: 'StringParameterValue', name: 'EXPECTED_PODVERTICAL_DURATION', value: expected_podvertical_duration ],
+						[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+						[$class: 'StringParameterValue', name: 'API_URL', value: api_url]
+				]
 			} catch ( Exception e) {
 				echo "PODVERTICAL Job failed with the following error: "
 				echo "${e.getMessage()}"

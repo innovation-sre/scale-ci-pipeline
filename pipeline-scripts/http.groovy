@@ -5,6 +5,8 @@ def http = HTTP_TEST.toString().toUpperCase()
 def pipeline = PIPELINE.toString().toUpperCase()
 def property_file_name = "http.properties"
 def pipeline_stage = env.PIPELINE_STAGE
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job stage is '${pipeline_stage}'"
 println "Current pipeline job build id is '${pipeline_id}'"
 
@@ -129,7 +131,10 @@ stage ('http_scale_test') {
 					[$class: 'StringParameterValue', name: 'CERBERUS_URL', value: cerberus_url ],
 					[$class: 'StringParameterValue', name: 'EMAIL_ID_FOR_RESULTS_SHEET', value: email_id_for_results_sheet ],
  					[$class: 'StringParameterValue', name: 'GSHEET_KEY', value: gsheet_key ],
-					[$class: 'StringParameterValue', name: 'GSHEET_KEY_LOCATION', value: gsheet_key_location ]]
+					[$class: 'StringParameterValue', name: 'GSHEET_KEY_LOCATION', value: gsheet_key_location ],
+					[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+					[$class: 'StringParameterValue', name: 'API_URL', value: api_url]
+			]
 
 		} catch ( Exception e) {
 			echo "ATS-SCALE-CI-HTTP Job failed with the following error: "

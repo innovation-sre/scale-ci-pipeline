@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def ns_per_cluster = NS_PER_CLUSTER.toString().toUpperCase()
 def property_file_name = "ns_per_cluster.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run ns_per_cluster test
@@ -74,7 +75,9 @@ stage('ns_per_cluster_scale_test') {
 				[$class: 'StringParameterValue', name: 'ES_HOST', value: es_host ],
 				[$class: 'StringParameterValue', name: 'ES_PORT', value: es_port ],
 				[$class: 'StringParameterValue', name: 'ES_INDEX_PREFIX', value: es_index_prefix ],
-				[$class: 'StringParameterValue', name: 'EXPECTED_NAMESPACES_PER_CLUSTER_DURATION', value: expected_namespaces_per_cluster_duration ]]
+				[$class: 'StringParameterValue', name: 'EXPECTED_NAMESPACES_PER_CLUSTER_DURATION', value: expected_namespaces_per_cluster_duration ],
+				[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+				[$class: 'StringParameterValue', name: 'API_URL', value: api_url]]
 			} catch ( Exception e) {
 				echo "NS_PER_CLUSTER Job failed with the following error: "
 				echo "${e.getMessage()}"

@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def nodevertical = NODEVERTICAL_SCALE_TEST.toString().toUpperCase()
 def property_file_name = "nodevertical.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run nodevertical scale test
@@ -95,7 +96,9 @@ stage ('nodevertical_scale_test') {
 						[$class: 'StringParameterValue', name: 'EXPECTED_NODEVERTICAL_DURATION', value: expected_nodevertical_duration ],
 						[$class: 'BooleanParameterValue', name: 'NODEVERTICAL_HEAVY', value: Boolean.valueOf(nodevertical_heavy) ],
 						[$class: 'StringParameterValue', name: 'NODEVERTICAL_HEAVY_PROBE_ENDPOINT', value: nodevertical_heavy_probe_endpoint ],
-						[$class: 'StringParameterValue', name: 'NODEVERTICAL_HEAVY_PROBE_PERIOD', value: nodevertical_heavy_probe_period ]]
+						[$class: 'StringParameterValue', name: 'NODEVERTICAL_HEAVY_PROBE_PERIOD', value: nodevertical_heavy_probe_period ],
+						[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+						[$class: 'StringParameterValue', name: 'API_URL', value: api_url]]
 
 			} catch ( Exception e) {
 				echo "ATS-SCALE-CI-NODEVERTICAL Job failed with the following error: "

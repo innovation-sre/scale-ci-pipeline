@@ -101,7 +101,7 @@ stage ('stress_scale_test') {
 				[$class: 'StringParameterValue', name: 'STRESS_DESCRIPTION', value: stress_description],
 				[$class: 'StringParameterValue', name: 'STRESS_NODESELECTOR', value: stress_nodeselector],
 				[$class: 'StringParameterValue', name: 'TOKEN', value: token],
-				[$class: 'StringParameterValue', name: 'API_URL', value: api_url],
+				[$class: 'StringParameterValue', name: 'API_URL', value: api_url]
 				]
 
 			} catch ( Exception e) {

@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def tooling = TOOLING.toString().toUpperCase()
 def property_file_name = "tooling.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 stage ('tooling') {
 	if (tooling == "TRUE") {
 		currentBuild.result = "SUCCESS"
@@ -34,7 +35,9 @@ stage ('tooling') {
 						[$class: 'StringParameterValue', name: 'ORCHESTRATION_USER', value: orchestration_user ],
 						[$class: 'StringParameterValue', name: 'PBENCH_IMAGE', value: pbench_image ],
 						[$class: 'StringParameterValue', name: 'KUBECONFIG_FILE', value: kubeconfig_file ],
-						[$class: 'StringParameterValue', name: 'PBENCH_SERVER', value: pbench_server ]]
+						[$class: 'StringParameterValue', name: 'PBENCH_SERVER', value: pbench_server ],
+						[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+						[$class: 'StringParameterValue', name: 'API_URL', value: api_url]]
 			} catch ( Exception e) {
 				echo "TOOLING Job failed with the following error: "
 				echo "${e.getMessage()}"

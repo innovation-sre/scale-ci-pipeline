@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def run_conformance = CONFORMANCE.toString().toUpperCase()
 def property_file_name = "conformance.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run conformance
@@ -60,7 +61,9 @@ stage ('conformance') {
 						[$class: 'StringParameterValue', name: 'PBENCH_SERVER', value: pbench_server ],
 						[$class: 'StringParameterValue', name: 'SCALE_CI_RESULTS_TOKEN', value: scale_ci_results_token ],
 						[$class: 'StringParameterValue', name: 'JOB_COMPLETION_POLL_ATTEMPTS', value: job_completion_poll_attempts ],
-						[$class: 'StringParameterValue', name: 'CONFORMANCE_TEST_PREFIX', value: conformance_test_prefix ]]
+						[$class: 'StringParameterValue', name: 'CONFORMANCE_TEST_PREFIX', value: conformance_test_prefix ],
+						[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+						[$class: 'StringParameterValue', name: 'API_URL', value: api_url]]
 			} catch ( Exception e) {
 				echo "CONFORMANCE Job failed with the following error: "
 				echo "${e.getMessage()}"
