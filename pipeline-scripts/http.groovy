@@ -2,7 +2,7 @@
 def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def http = HTTP_TEST.toString().toUpperCase()
-def pipeline = PIPELINE.toString().toUpperCase()
+//def pipeline = PIPELINE.toString().toUpperCase()
 def property_file_name = "http.properties"
 def pipeline_stage = env.PIPELINE_STAGE
 def token = TOKEN.toString()
@@ -48,9 +48,9 @@ stage ('http_scale_test') {
 		def http_test_load_generator_nodes = http_properties['HTTP_TEST_LOAD_GENERATOR_NODES']
 		def http_test_app_projects = http_properties['HTTP_TEST_APP_PROJECTS']
 		def http_test_app_templates = http_properties['HTTP_TEST_APP_TEMPLATES']
-		if (pipeline == "TRUE" && pipeline_stage == "2") {
-			http_test_app_templates = http_properties['HTTP_TEST_APP_TEMPLATES_LARGE']
-		}
+//		if (pipeline == "TRUE" && pipeline_stage == "2") {
+//			http_test_app_templates = http_properties['HTTP_TEST_APP_TEMPLATES_LARGE']
+//		}
 		def http_test_runtime = http_properties['HTTP_TEST_RUNTIME']
 		def http_test_mb_ramp_up = http_properties['HTTP_TEST_MB_RAMP_UP']
 		def http_test_mb_delay = http_properties['HTTP_TEST_MB_DELAY']

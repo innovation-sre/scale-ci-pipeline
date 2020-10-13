@@ -12,10 +12,10 @@ def services_per_namespace = SERVICES_PER_NAMESPACE.toString().toUpperCase()
 def podvertical = PODVERTICAL.toString().toUpperCase()
 def deployments_per_ns = DEPLOYMENTS_PER_NS.toString().toUpperCase()
 def ns_per_cluster = NS_PER_CLUSTER.toString().toUpperCase()
-def networking = NETWORKING.toString().toUpperCase()
-def kraken = KRAKEN.toString().toUpperCase()
+//def networking = NETWORKING.toString().toUpperCase()
+//def kraken = KRAKEN.toString().toUpperCase()
 def node_label = NODE_LABEL.toString()
-def run_uperf = UPERF.toString().toUpperCase()
+//def run_uperf = UPERF.toString().toUpperCase()
 def token = TOKEN.toString()
 def url = API_URL.toString()
 node (node_label) {
@@ -75,10 +75,10 @@ node (node_label) {
 		load "pipeline-scripts/podvertical.groovy"
 	}
 
-	// stage to run networking test
-	if ( networking == "TRUE") {
-		load "pipeline-scripts/networking.groovy"
-	}
+//	// stage to run networking test
+//	if ( networking == "TRUE") {
+//		load "pipeline-scripts/networking.groovy"
+//	}
 
 	// stage to run mastervertical scale test
 	if (mastervertical == "TRUE") {
@@ -91,13 +91,13 @@ node (node_label) {
 	}
 
 	// stage to run kraken test
-	if (kraken == "TRUE") {
-		load "pipeline-scripts/kraken.groovy"
-	}
+//	if (kraken == "TRUE") {
+//		load "pipeline-scripts/kraken.groovy"
+//	}
 
-	if (run_uperf == "TRUE") {
-		load "pipeline-scripts/uperf.groovy"
-	}
+//	if (run_uperf == "TRUE") {
+//		load "pipeline-scripts/uperf.groovy"
+//	}
 
 
 	// cleanup the workspace

@@ -3,7 +3,7 @@
 def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def ocpv4_scale = OPENSHIFTv4_SCALE.toString().toUpperCase()
-def pipeline = PIPELINE.toString().toUpperCase()
+//def pipeline = PIPELINE.toString().toUpperCase()
 def property_file_name = "openshiftv4_scale.properties"
 def pipeline_stage = env.PIPELINE_STAGE
 println "Current pipeline job stage is '${pipeline_stage}'"
@@ -39,11 +39,11 @@ stage ('4.x scale cluster') {
 		def scale_test_prefix = scale_properties['SCALE_TEST_PREFIX']
 		def scale_metadata_prefix = scale_properties['SCALE_METADATA_PREFIX']
 		def scale_worker_count = scale_properties['SCALE_WORKER_COUNT']
-		if (pipeline == "TRUE" && pipeline_stage == "2") {
-			scale_worker_count = scale_properties['SCALE_WORKER_COUNT_V2']
-		} else if (pipeline == "TRUE" && pipeline_stage == "3") {
-			scale_worker_count = scale_properties['SCALE_WORKER_COUNT_V3']
-		}
+//		if (pipeline == "TRUE" && pipeline_stage == "2") {
+//			scale_worker_count = scale_properties['SCALE_WORKER_COUNT_V2']
+//		} else if (pipeline == "TRUE" && pipeline_stage == "3") {
+//			scale_worker_count = scale_properties['SCALE_WORKER_COUNT_V3']
+//		}
 		def scale_poll_attempts = scale_properties['SCALE_POLL_ATTEMPTS']
 		def expected_scale_duration = scale_properties['EXPECTED_SCALE_DURATION']
 

@@ -10,15 +10,15 @@
         description: ''
         name: TOOLING
     - bool:
-        default: true
+        default: false
         description: ''
         name: FIO
     - bool:
-        default: true
+        default: false
         description: ''
         name: STRESS
     - bool:
-        default: true
+        default: false
         description: ''
         name: HPA
     - bool:
@@ -48,40 +48,16 @@
     - bool:
         default: false
         description: ''
-        name: NETWORKING
-    - bool:
-        default: false
-        description: ''
-        name: MONGODB_YCSB_TEST
-    - bool:
-        default: false
-        description: ''
         name: MASTERVERTICAL_SCALE_TEST
     - bool:
         default: false
         description: ''
         name: NS_PER_CLUSTER
-    - bool:
-        default: false
-        description: ''
-        name: UPERF
-    - bool:
-        default: false
-        description: ''
-        name: KRAKEN
-    - bool:
-        default: false
-        description: ''
-        name: PIPELINE
     - string:
         default: 'scale-ci'
         description: ''
         name: NODE_LABEL
-    - bool:
-        default: false
-        description: ''
-        name: PIPELINE
-    - string:
+    - password:
         default: ''
         description: 'Temporary token to login to the cluster'
         name: TOKEN
@@ -113,7 +89,6 @@
         default: '${WORKSPACE}/properties-files/hpa.properties'
         description: ''
         name: HPA_PROPERTY_FILE
-
     - string:
         default: '${WORKSPACE}/properties-files/conformance.properties'
         description: ''
@@ -142,10 +117,6 @@
         default: ''
         description: ''
         name: NETWORKING_PROPERTY_FILE
-    - string:
-        default: ''
-        description: ''
-        name: NS_PER_CLUSTER_PROPERTY_FILE
     - string:
         default: ''
         description: ''
