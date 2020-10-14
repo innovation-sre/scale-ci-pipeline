@@ -14,11 +14,11 @@
 
         # fetch the kubeconfig from the orchestration host
         echo "Fetching the kubeconfig from the orchestration host"
-
+        set +u
         if [[ -n ${TOKEN} && -n ${API_URL} ]]; then
           ssh ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST} oc login ${API_URL} --token=${TOKEN}
         fi
-
+        set -u
         scp ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST}:${KUBECONFIG_FILE} ${WORKSPACE}/kubeconfig
         export KUBECONFIG=${WORKSPACE}/kubeconfig
 

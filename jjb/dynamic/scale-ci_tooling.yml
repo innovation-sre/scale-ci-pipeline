@@ -13,9 +13,11 @@
         ssh-keygen -y -f ${PRIVATE_KEY} > $PUBLIC_KEY
 
         # login to the cluster
+        set +u
         if [[ -n ${TOKEN} && -n ${API_URL} ]]; then
           ssh ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST} oc login ${API_URL} --token=${TOKEN}
         fi
+        set -u
 
         export OPTIONS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=1200"
         chmod 600 ${PRIVATE_KEY}

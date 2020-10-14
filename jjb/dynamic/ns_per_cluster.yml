@@ -13,9 +13,11 @@
         export KUBECONFIG="/root/.kube/config"
 
         # login to the cluster
+        set +u
         if [[ -n ${TOKEN} && -n ${API_URL} ]]; then
           ssh ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST} oc login ${API_URL} --token=${TOKEN}
         fi
+        set -u
 
         if [[ "${USE_PROXY}" == "true" ]]; then
         ssh ${OPTIONS} -o ProxyCommand="ssh -i ${PRIVATE_KEY} -W %h:%p ${PROXY_USER}@${PROXY_HOST}" -i ${PRIVATE_KEY} ${USER}@${JUMP_HOST} 'bash -s' <<ENDSSH
