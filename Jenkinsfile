@@ -1,10 +1,10 @@
 #!/usr/bin/env groovy
 
 def contact = "nelluri@redhat.com"
-def tooling = TOOLING.toString().toUpperCase()
+//def tooling = TOOLING.toString().toUpperCase()
 def fio = FIO.toString().toUpperCase()
 def stress = STRESS.toString().toUpperCase()
-def run_conformance = CONFORMANCE.toString().toUpperCase()
+//def run_conformance = CONFORMANCE.toString().toUpperCase()
 def nodevertical = NODEVERTICAL_SCALE_TEST.toString().toUpperCase()
 def mastervertical = MASTERVERTICAL_SCALE_TEST.toString().toUpperCase()
 def http = HTTP_TEST.toString().toUpperCase()
@@ -27,9 +27,9 @@ node (node_label) {
 		echo "Properties Prefix: ${env.PROPERTIES_PREFIX}"
 	}
 	// stage to setup pbench
-	if (tooling == "TRUE") {
-		load "pipeline-scripts/tooling.groovy"
-	}
+//	if (tooling == "TRUE") {
+//		load "pipeline-scripts/tooling.groovy"
+//	}
 
 	if (fio == "TRUE") {
 		load "pipeline-scripts/fio.groovy"
@@ -46,9 +46,9 @@ node (node_label) {
 	}
 
 	// stage to run conformance
-	if (run_conformance == "TRUE") {
-		load "pipeline-scripts/conformance.groovy"
-	}
+//	if (run_conformance == "TRUE") {
+//		load "pipeline-scripts/conformance.groovy"
+//	}
 
 	// stage to run nodevertical scale test
 	if (nodevertical == "TRUE") {

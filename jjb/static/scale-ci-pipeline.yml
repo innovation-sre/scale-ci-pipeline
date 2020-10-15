@@ -8,10 +8,6 @@
     - bool:
         default: false
         description: ''
-        name: TOOLING
-    - bool:
-        default: false
-        description: ''
         name: FIO
     - bool:
         default: false
@@ -21,10 +17,6 @@
         default: false
         description: ''
         name: HPA
-    - bool:
-        default: false
-        description: ''
-        name: CONFORMANCE
     - bool:
         default: false
         description: ''
@@ -113,14 +105,6 @@
         default: '${WORKSPACE}/properties-files/services_per_namespace.properties'
         description: ''
         name: SERVICES_PER_NAMESPACE_PROPERTY_FILE
-    - string:
-        default: ''
-        description: ''
-        name: NETWORKING_PROPERTY_FILE
-    - string:
-        default: ''
-        description: ''
-        name: UPERF_PROPERTIES_FILE
     - string:
         default: ''
         name: KRAKEN_PROPERTY_FILE
