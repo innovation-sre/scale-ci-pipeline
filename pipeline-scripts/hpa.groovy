@@ -120,10 +120,7 @@ stage ('hpa_scale_test') {
 				[$class: 'StringParameterValue', name: 'HPA_STEPSIZE', value: hpa_stepsize],
 				[$class: 'StringParameterValue', name: 'HPA_PAUSE', value: hpa_pause],
 				[$class: 'StringParameterValue', name: 'HPA_DESCRIPTION', value: hpa_description],
-				[$class: 'StringParameterValue', name: 'HPA_NODESELECTOR', value: hpa_nodeselector],
-				[$class: 'StringParameterValue', name: 'IBM_CLOUD_STORAGE_BILLING', value: ibm_cloud_storage_billing],
-				[$class: 'StringParameterValue', name: 'IBM_CLOUD_STORAGE_REGION', value: ibm_cloud_storage_region],
-				[$class: 'StringParameterValue', name: 'IBM_CLOUD_STORAGE_ZONE', value: ibm_cloud_storage_zone]]
+				[$class: 'StringParameterValue', name: 'HPA_NODESELECTOR', value: hpa_nodeselector]]
 
 			} catch ( Exception e) {
 				echo "ATS-SCALE-CI-HPA Job failed with the following error: "

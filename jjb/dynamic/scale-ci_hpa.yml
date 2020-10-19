@@ -245,18 +245,6 @@
         default: "ibm_cloud"
         description: ""
         name: OCP_CLUSTER_ENV
-    - string:
-        default: "hourly"
-        description: ""
-        name: IBM_CLOUD_STORAGE_BILLING
-    - string:
-        default: "us-south"
-        description: ""
-        name: IBM_CLOUD_STORAGE_REGION
-    - string:
-        default: "dal13"
-        description: ""
-        name: IBM_CLOUD_STORAGE_ZONE
     
     project-type: freestyle
     properties:
