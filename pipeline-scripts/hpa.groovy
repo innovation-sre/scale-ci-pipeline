@@ -50,16 +50,29 @@ stage ('hpa_scale_test') {
 			def hpa_container_image = hpa_properties['HPA_CONTAINER_IMAGE']
 			def hpa_runtime = hpa_properties['HPA_RUNTIME']
 			def hpa_nodeselector = hpa_properties['HPA_NODESELECTOR']
-			def hpa_cpu = hpa_properties['HPA_CPU']
-			def hpa_cpu_load = hpa_properties['HPA_CPU_LOAD']
-			def hpa_io = hpa_properties['HPA_IO']
-			def hpa_mem = hpa_properties['HPA_MEM']
-			def hpa_daemons = hpa_properties['HPA_DAEMONS']
-			def hpa_additional_args = hpa_properties['HPA_ADDITIONAL_ARGS']
-			def hpa_mem_bytes = hpa_properties['HPA_MEM_BYTES']
 			def hpa_description = hpa_properties['HPA_DESCRIPTION']
 			def hpa_pause = hpa_properties['HPA_PAUSE']
 			def hpa_stepsize = hpa_properties['HPA_STEPSIZE']
+			def hpa_retries = hpa_properties['HPA_RETRIES']
+			def hpa_sleep_time = hpa_properties['HPA_SLEEP_TIME']
+			def hpa_traffic_loader_count = hpa_properties['HPA_TRAFFIC_LOADER_COUNT']
+			def hpa_max_replicas = hpa_properties['HPA_MAX_REPLICAS']
+			def hpa_min_replicas = hpa_properties['HPA_MIN_REPLICAS']
+			def hpa_cpu_percent = hpa_properties['HPA_CPU_PERCENT']
+			def hpa_deployment_replicas = hpa_properties['HPA_DEPLOYMENT_REPLICAS']
+			def hpa_namespace = hpa_properties['HPA_NAMESPACE']
+			def hpa_traffic_loader_image = hpa_properties['HPA_TRAFFIC_LOADER_IMAGE']
+			def hpa_deployment_resource_request = hpa_properties['HPA_DEPLOYMENT_RESOURCE_REQUEST']
+			def hpa_deployment_resource_limit = hpa_properties['HPA_DEPLOYMENT_RESOURCE_LIMIT']
+			def hpa_deployment_image = hpa_properties['HPA_DEPLOYMENT_IMAGE']
+			def hpa_deployment_name = hpa_properties['HPA_DEPLOYMENT_NAME']
+			def hpa_ssh_port = hpa_properties['HPA_SSH_PORT']
+			def hpa_parallelism = hpa_properties['HPA_PARALLELISM']
+			def hpa_completions = hpa_properties['HPA_COMPLETIONS']
+			def ibm_cloud_storage_billing = hpa_properties['IBM_CLOUD_STORAGE_BILLING']
+			def ibm_cloud_storage_region = hpa_properties['IBM_CLOUD_STORAGE_REGION']
+			def ibm_cloud_storage_zone = hpa_properties['IBM_CLOUD_STORAGE_ZONE']
+			
 			try {
 				hpa_build = build job: 'ATS-SCALE-CI-HPA',
 				parameters: [   [$class: 'StringParameterValue', name: 'SNAFU_USER', value: snafu_user],
@@ -88,13 +101,22 @@ stage ('hpa_scale_test') {
 				[$class: 'StringParameterValue', name: 'HPA_MAX_NODES', value: hpa_max_nodes],
 				[$class: 'StringParameterValue', name: 'HPA_CONTAINER_IMAGE', value: hpa_container_image],
 				[$class: 'StringParameterValue', name: 'HPA_RUNTIME', value: hpa_runtime],
-				[$class: 'StringParameterValue', name: 'HPA_CPU', value: hpa_cpu],
-				[$class: 'StringParameterValue', name: 'HPA_CPU_LOAD', value: hpa_cpu_load],
-				[$class: 'StringParameterValue', name: 'HPA_IO', value: hpa_io],
-				[$class: 'StringParameterValue', name: 'HPA_MEM', value: hpa_mem],
-				[$class: 'StringParameterValue', name: 'HPA_DAEMONS', value: hpa_daemons],
-				[$class: 'StringParameterValue', name: 'HPA_ADDITIONAL_ARGS', value: hpa_additional_args],
-				[$class: 'StringParameterValue', name: 'HPA_MEM_BYTES', value: hpa_mem_bytes],
+				[$class: 'StringParameterValue', name: 'HPA_RETRIES', value: hpa_retries], // start here
+				[$class: 'StringParameterValue', name: 'HPA_SLEEP_TIME', value: hpa_sleep_time],
+				[$class: 'StringParameterValue', name: 'HPA_TRAFFIC_LOADER_COUNT', value: hpa_traffic_loader_count],
+				[$class: 'StringParameterValue', name: 'HPA_MAX_REPLICAS', value: hpa_max_replicas],
+				[$class: 'StringParameterValue', name: 'HPA_MIN_REPLICAS', value: hpa_min_replicas],
+				[$class: 'StringParameterValue', name: 'HPA_CPU_PERCENT', value: hpa_cpu_percent],
+				[$class: 'StringParameterValue', name: 'HPA_DEPLOYMENT_REPLICAS', value: hpa_deployment_replicas],
+				[$class: 'StringParameterValue', name: 'HPA_NAMESPACE', value: hpa_namespace], 
+				[$class: 'StringParameterValue', name: 'HPA_TRAFFIC_LOADER_IMAGE', value: hpa_traffic_loader_image],
+				[$class: 'StringParameterValue', name: 'HPA_DEPLOYMENT_RESOURCE_REQUEST', value: hpa_deployment_resource_request],
+				[$class: 'StringParameterValue', name: 'HPA_DEPLOYMENT_RESOURCE_LIMIT', value: hpa_deployment_resource_limit],
+				[$class: 'StringParameterValue', name: 'HPA_DEPLOYMENT_IMAGE', value: hpa_deployment_image],
+				[$class: 'StringParameterValue', name: 'HPA_DEPLOYMENT_NAME', value: hpa_deployment_name],
+				[$class: 'StringParameterValue', name: 'HPA_SSH_PORT', value: hpa_ssh_port],
+				[$class: 'StringParameterValue', name: 'HPA_PARALLELISM', value: hpa_parallelism],
+				[$class: 'StringParameterValue', name: 'HPA_COMPLETIONS', value: hpa_completions],
 				[$class: 'StringParameterValue', name: 'HPA_STEPSIZE', value: hpa_stepsize],
 				[$class: 'StringParameterValue', name: 'HPA_PAUSE', value: hpa_pause],
 				[$class: 'StringParameterValue', name: 'HPA_DESCRIPTION', value: hpa_description],

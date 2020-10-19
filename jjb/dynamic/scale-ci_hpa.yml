@@ -29,15 +29,15 @@
         # logging
         logs_counter=0
         logs_counter_limit=100
-        oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-stress
+        oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-hpa
         while true; do
           logs_counter=$((logs_counter+1))
-          if [[ $(oc get job -n scale-ci-tooling scale-ci-stress -o json | jq -e '.status.active==1') == "true" ]]; then
+          if [[ $(oc get job -n scale-ci-tooling scale-ci-hpa -o json | jq -e '.status.active==1') == "true" ]]; then
             if [[ $logs_counter -le $logs_counter_limit ]]; then
               echo "=================================================================================================================================================================="
               echo "Attempt $logs_counter to reconnect and fetch the controller pod logs"
               echo "=================================================================================================================================================================="
-              oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-stress
+              oc logs --timestamps -n scale-ci-tooling -f job/scale-ci-hpa
             else
               echo "Exceeded the retry limit trying to get the controller logs: $logs_counter_limit, exiting."
               exit 1
@@ -49,7 +49,7 @@
         done
 
         # status
-        oc get job -n scale-ci-tooling scale-ci-stress -o json | jq -e ".status.succeeded==1"
+        oc get job -n scale-ci-tooling scale-ci-hpa -o json | jq -e ".status.succeeded==1"
     concurrent: true
     description: |
       HPA (horizontal pod autoscaler) workload is used to test the scalability of pods with high resource demand within OpenShift. Specifically CPU and Memory.
@@ -87,7 +87,7 @@
         description: The user for the Orchestration host.
         name: ORCHESTRATION_USER
     - string:
-        default: "alexeiled/stress-ng"
+        default: "quay.io/openshift-scale/scale-ci-workload"
         description: Container image that runs the workload script.
         name: WORKLOAD_IMAGE
     - bool:
@@ -134,82 +134,118 @@
         default: 10000
         description: Number of retries for Ansible to poll if the workload job has completed.Poll attempts delay 10s between polls with some additional time taken for each polling action depending on the orchestration host setup. FIO I/O test for many pods and big file sizes can run for hours and either we rise 'JOB_COMPLETION_POLL_ATTEMPTS' to high value, or remove fully checking for 'JOB_COMPLETION_POLL_ATTEMPTS' for FIO I/O test.
         name: JOB_COMPLETION_POLL_ATTEMPTS
-    - string:
-        default: "stresstest"
-        description: Prefix to use for FIO I/O test
-        name: STRESS_PREFIX
-    - string:
-        default: 100
-        description: start N workers spinning on anonymous mmap
-        name: STRESS_MEM
-    - string:
-        default: '1G'
-        description: allocate N bytes per vm worker (default 256MB)
-        name: STRESS_MEM_BYTES
-    - string:
-        default: '--metrics-brief'
-        description: Additional arguments to ng-stress
-        name: STRESS_ADDITIONAL_ARGS
-    - string:
-        default: 100
-        description: start N workers spinning on sync()
-        name: STRESS_IO
-    - string:
-        default: 100
-        description: load CPU by P %, 0=sleep, 100=full load
-        name: STRESS_CPU_LOAD
-    - string:
-        default: 4
-        description: start N workers spinning on sqrt(rand())
-        name: STRESS_CPU
-    - string:
-        default: '60s'
-        description: timeout after T seconds
-        name: STRESS_RUNTIME
-    - string:
-        default: 'alexeiled/stress-ng'
-        description: pod image
-        name: STRESS_POD_IMAGE
-    - string:
-        default: 'alexeiled/stress-ng'
-        description: pod image
-        name: STRESS_CONTAINER_IMAGE
-    - string:
-        default: 5
-        description: start N workers creating multiple daemons
-        name: STRESS_DAEMONS
-    - bool:
-        default: true
-        description: If set to 'true' test project will be removed at end of test.
-        name: STRESS_CLEANUP
-    - string:
-        default: "stresstest"
-        description: "Basename used by cluster loader for the project(s) it creates."
-        name: STRESS_BASENAME
-    - string:
-        default: 60s
-        description: FIO test runtime
-        name: STRESS_RUNTIME
-    - string:
-        default: 2
-        description: Number of nodes to test FIO on
-        name: STRESS_MAX_NODES
+    # String vars
     - string:
         default: ""
-        description: For cases when it is necessary to have FIO pods to be assigned to already labeled nodes with specific label 'FIOTEST_NODESELECTOR' allows to specify desired label. FIO I/O test does not label nodes, it expect that labels are already assigned to nodes.
-        name: STRESS_NODESELECTOR
+        description: "HPA workload description"
+        name: HPA_DESCRIPTION
     - string:
-        default: ""
-        description: Description for the test case
-        name: STRESS_DESCRIPTION
+        default: "scale-ci-hpa-deployment"
+        description: "Name of deployment where pods will be stressed"
+        name: HPA_DEPLOYMENT_NAME
+    - string:
+        default: "k8s.gcr.io/hpa-example"
+        description: "Container image which run cpu intensive task. Must be called with HTTP request"
+        name: HPA_DEPLOYMENT_IMAGE
+    - string:
+        default: "hpa"
+        description: ""
+        name: HPA_PREFIX
+    - string:
+        default: "500m"
+        description: "Pod/container cpu resource limit"
+        name: HPA_DEPLOYMENT_RESOURCE_LIMIT
+    - string:
+        default: "200m"
+        description: "Pod/container cpu resource request"
+        name: HPA_DEPLOYMENT_RESOURCE_REQUEST
+    - string:
+        default: "hpatest"
+        description: "Project name for HPA "
+        name: HPA_BASENAME
+    - string:
+        default: "busybox"
+        description: ""
+        name: HPA_CONTAINER_IMAGE
+    - string:
+        default: "busybox"
+        description: "Image where wget calls are made"
+        name: HPA_TRAFFIC_LOADER_IMAGE
+    - string:
+        default: "scale-ci-tooling"
+        description: ""
+        name: HPA_NAMESPACE
+    - string:
+        default: "60s"
+        description: ""
+        name: HPA_RUNTIME
+    - string:
+        default: 1
+        description: ""
+        name: HPA_MAX_NODES
+    - string:
+        default: 6
+        description: ""
+        name: HPA_PARALLELISM
+    - string:
+        default: 24
+        description: ""
+        name: HPA_COMPLETIONS
     - string:
         default: 50
-        description: Step size
-        name: STRESS_STEPSIZE
+        description: ""
+        name: HPA_STEPSIZE
+    - string:
+        default: 2
+        description: "Initial number of pods in deployment for HPA test"
+        name: HPA_DEPLOYMENT_REPLICAS
     - string:
         default: 60
-        description: Pause between steps
-        name: STRESS_PAUSE
+        description: ""
+        name: HPA_PAUSE
+    - string:
+        default: 2022
+        description: ""
+        name: HPA_SSH_PORT
+    - string:
+        default: 50
+        description: "CPU threshold for HPA scalability"
+        name: HPA_CPU_PERCENT
+    - string:
+        default: 2
+        description: "Min replicas, same as deployment replicas"
+        name: HPA_MIN_REPLICAS
+    - string:
+        default: 10
+        description: "Maximum HPA replicas"
+        name: HPA_MAX_REPLICAS
+    - string:
+        default: 10
+        description: "Number of pods sending traffic to scalability test"
+        name: HPA_TRAFFIC_LOADER_COUNT
+    - string:
+        default: 5
+        description: "Number of seconds to wait while pods are scaled"
+        name: HPA_SLEEP_TIME
+    - string:
+        default: 200
+        description: "Number of retries while waiting for desired or max pod to be created"
+        name: HPA_RETRIES
+    # boolean vars
+    - string:
+        default: "workload=true"
+        description: ""
+        name: HPA_NODESELECTOR
+    - bool:
+        default: true
+        description: "Cleanup k8s resources after test?"
+        name: HPA_CLEANUP
+    # other vars
+    - string:
+        default: "ibm_cloud"
+        description: ""
+        name: OCP_CLUSTER_ENV
+    
     project-type: freestyle
     properties:
     - raw:
