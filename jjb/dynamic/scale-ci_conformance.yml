@@ -58,7 +58,7 @@
     concurrent: true
     description: |
       Conformance runs the e2e kubernetes tests to check the sanity of the cluster.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-CONFORMANCE
     node: scale-ci
@@ -173,7 +173,7 @@
     - git:
         branches:
         - '*/master'
-        url: https://github.com/openshift-scale/workloads.git
+        url: https://github.com/innovation-sre/workloads.git
     triggers: []
     wrappers:
     - workspace-cleanup:

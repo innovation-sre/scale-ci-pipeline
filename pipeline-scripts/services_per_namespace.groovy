@@ -14,7 +14,7 @@ stage ('ATS-SCALE-CI-SERVICES-PER-NAMESPACE') {
 		node(node_label) {
 			// get properties file
 			if (fileExists(property_file_name)) {
-				println "Looks like the propertyfile already exists, erasing it"
+				println "Looks like the property file already exists, erasing it"
 				sh "rm ${property_file_name}"
 			}
 			// get properties file
@@ -54,7 +54,7 @@ stage ('ATS-SCALE-CI-SERVICES-PER-NAMESPACE') {
 
 			// Run services_per_namespace job
 			try {
-				services_per_namespace_build = build job: 'ATS-SCALE-CI-TEST',
+				services_per_namespace_build = build job: 'ATS-SCALE-CI-SERVICES-PER-NAMESPACE',
 				parameters: [   [$class: 'LabelParameterValue', name: 'node', label: node_label ],
 						[$class: 'StringParameterValue', name: 'SSHKEY_TOKEN', value: sshkey_token ],
 						[$class: 'StringParameterValue', name: 'ORCHESTRATION_HOST', value: orchestration_host ],

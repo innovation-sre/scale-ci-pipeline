@@ -12,6 +12,7 @@ def services_per_namespace = SERVICES_PER_NAMESPACE.toString().toUpperCase()
 def podvertical = PODVERTICAL.toString().toUpperCase()
 def deployments_per_ns = DEPLOYMENTS_PER_NS.toString().toUpperCase()
 def ns_per_cluster = NS_PER_CLUSTER.toString().toUpperCase()
+def hpa = HPA.toString().toUpperCase()
 //def networking = NETWORKING.toString().toUpperCase()
 //def kraken = KRAKEN.toString().toUpperCase()
 def node_label = NODE_LABEL.toString()
@@ -33,6 +34,10 @@ node (node_label) {
 
 	if (fio == "TRUE") {
 		load "pipeline-scripts/fio.groovy"
+	}
+
+	if (hpa == "TRUE") {
+		load "pipeline-scripts/hpa.groovy"
 	}
 
 	// stage to run node stress test

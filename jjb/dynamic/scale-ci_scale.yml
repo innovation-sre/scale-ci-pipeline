@@ -52,7 +52,7 @@
     concurrent: true
     description: |
       This job gets the  OpenShift cluster to the desired node count.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-SCALE
     node: scale-ci
@@ -179,7 +179,7 @@
     - git:
         branches:
         - '*/master'
-        url: https://github.com/openshift-scale/workloads.git
+        url: https://github.com/innovation-sre/workloads.git
     triggers: []
     wrappers:
     - workspace-cleanup:

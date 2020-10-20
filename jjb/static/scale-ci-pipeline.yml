@@ -106,6 +106,14 @@
         description: ''
         name: SERVICES_PER_NAMESPACE_PROPERTY_FILE
     - string:
+        default: '${WORKSPACE}/properties-files/services_per_namespace.properties'
+        description: ''
+        name: SERVICES_PER_NAMESPACE_PROPERTY_FILE
+    - string:
+        default: '${WORKSPACE}/properties-files/ns_per_cluster.properties'
+        description: ''
+        name: NS_PER_CLUSTER_PROPERTY_FILE
+    - string:
         default: ''
         name: KRAKEN_PROPERTY_FILE
     pipeline-scm:

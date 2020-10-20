@@ -69,9 +69,6 @@ stage ('hpa_scale_test') {
 			def hpa_ssh_port = hpa_properties['HPA_SSH_PORT']
 			def hpa_parallelism = hpa_properties['HPA_PARALLELISM']
 			def hpa_completions = hpa_properties['HPA_COMPLETIONS']
-			def ibm_cloud_storage_billing = hpa_properties['IBM_CLOUD_STORAGE_BILLING']
-			def ibm_cloud_storage_region = hpa_properties['IBM_CLOUD_STORAGE_REGION']
-			def ibm_cloud_storage_zone = hpa_properties['IBM_CLOUD_STORAGE_ZONE']
 			
 			try {
 				hpa_build = build job: 'ATS-SCALE-CI-HPA',

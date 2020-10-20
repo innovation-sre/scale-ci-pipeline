@@ -59,7 +59,7 @@
     concurrent: true
     description: |
       MasterVertical workload is used to measure control plane density for OpenShift. This test loads several objects across the cluster using cluster loader.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-MASTERVERTICAL
     node: scale-ci

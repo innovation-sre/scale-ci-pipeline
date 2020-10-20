@@ -5,16 +5,22 @@
     - shell: |+
         set -o pipefail
         set -eux
-        env
         # get perf keys to access orchestration host and set ssh session options
-        git clone https://${SSHKEY_TOKEN}@github.com/innovation-sre/orchestration-host.git
-        export PUBLIC_KEY=${WORKSPACE}/orchestration-host/ssh_keys/id_rsa.pub
-        export PRIVATE_KEY=${WORKSPACE}/orchestration-host/ssh_keys/id_rsa
+        export PUBLIC_KEY=${WORKSPACE}/id_rsa.pub
+        ssh-keygen -y -f ${PRIVATE_KEY} > $PUBLIC_KEY
         export OPTIONS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=1200"
         chmod 600 ${PRIVATE_KEY}
 
         # fetch the kubeconfig from the orchestration host
-        echo "Fetching the  kubeconfig from the orchestration host"
+        echo "Fetching the kubeconfig from the orchestration host"
+
+        # login to the cluster
+        set +u
+        if [[ -n ${TOKEN} && -n ${API_URL} ]]; then
+          ssh ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST} oc login ${API_URL} --token=${TOKEN}
+        fi
+        set -u
+
         scp ${OPTIONS} -i ${PRIVATE_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST}:${KUBECONFIG_FILE} ${WORKSPACE}/kubeconfig
         export KUBECONFIG=${WORKSPACE}/kubeconfig
 
@@ -293,6 +299,7 @@
         branches:
         - '*/master'
         url: https://github.com/innovation-sre/workloads.git
+        credentials-id: GITHUB_REPO
     triggers: []
     wrappers:
     - workspace-cleanup:
@@ -300,6 +307,7 @@
     - ansicolor:
         colormap: xterm
     - credentials-binding:
-          - text:
-                credential-id: SSHKEY_TOKEN
-                variable: SSHKEY_TOKEN
+          - ssh-user-private-key:
+                credential-id: ORCHESTRATION_HOST
+                key-file-variable: PRIVATE_KEY
+                username-variable: ORCHESTRATION_USER

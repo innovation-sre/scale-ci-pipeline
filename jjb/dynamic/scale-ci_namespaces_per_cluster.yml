@@ -52,7 +52,7 @@
     concurrent: true
     description: |
       Namespaces per cluster workload is used to validate the namespaces per cluster limit and push it for OpenShift.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-NAMESPACES-PER-CLUSTER
     node: scale-ci
@@ -203,7 +203,7 @@
     - git:
         branches:
         - '*/master'
-        url: https://github.com/openshift-scale/workloads.git
+        url: https://github.com/innovation-sre/workloads.git
     triggers: []
     wrappers:
     - workspace-cleanup:

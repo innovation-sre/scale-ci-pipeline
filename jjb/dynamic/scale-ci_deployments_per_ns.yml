@@ -59,7 +59,7 @@
     concurrent: true
     description: |
       Deployments per namespace workload is used to validate and push the cluster limits of OpenShift. This loads up the cluster with maximum deployments per namespace using cluster loader.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-DEPLOYMENTS-PER-NAMESPACE
     node: scale-ci
@@ -202,7 +202,7 @@
     - git:
         branches:
         - '*/master'
-        url: https://github.com/openshift-scale/workloads.git
+        url: https://github.com/innovation-sre/workloads.git
     triggers: []
     wrappers:
     - workspace-cleanup:

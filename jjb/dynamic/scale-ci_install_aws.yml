@@ -24,7 +24,7 @@
     concurrent: true
     description: |
       Installs and configures OCP 4.x cluster on AWS.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-OCP-AWS-DEPLOY
     node: scale-ci
@@ -430,7 +430,7 @@
     - git:
         branches:
         - '*/master'
-        url: https://github.com/openshift-scale/scale-ci-deploy.git
+        url: https://github.com/innovation-sre/scale-ci-deploy.git
     triggers: []
     wrappers:
     - workspace-cleanup:

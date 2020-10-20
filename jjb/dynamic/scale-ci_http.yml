@@ -29,7 +29,7 @@
     concurrent: true
     description: |
       This test is a data-plane workload generator that runs http requests through HAProxy into deployed pods.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-HTTP
     node: scale-ci

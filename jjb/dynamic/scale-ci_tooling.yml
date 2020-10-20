@@ -37,7 +37,7 @@
     concurrent: true
     description: |
       The tooling job will configure [pbench](https://github.com/distributed-system-analysis/pbench) tooling on master, infra, and two worker nodes. Pbench tooling will permit the collection of pbench tools over a test duration. The default tools are disk, iostat, mpstat, oc, perf and pidstat.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-TOOLING
     node: scale-ci

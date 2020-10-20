@@ -59,7 +59,7 @@
     concurrent: true
     description: |
       NodeVertical workload is used to measure kubelet density for OpenShift. This means NodeVertical loads several nodes to max pods using cluster loader.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-NODEVERTICAL
     node: scale-ci

@@ -23,7 +23,7 @@
         do
         time ansible-playbook -vvv main.yml | tee $(date +"%Y%m%d-%H%M%S")-jetpack-install.timing
         ssh-copy-id -i ${PUBLIC_KEY} ${ORCHESTRATION_USER}@${ORCHESTRATION_HOST}
-        git clone https://github.com/openshift-scale/scale-ci-deploy.git
+        git clone https://github.com/innovation-sre/scale-ci-deploy.git
         cd scale-ci-deploy
         # disable openshift install as we already installed via jetpack
         export OPENSHIFT_INSTALL=false
@@ -32,7 +32,7 @@
     concurrent: false
     description: |
       Installs and configures OCP 4.x cluster on OSP.
-      This job is managed by https://github.com/openshift-scale/scale-ci-pipeline
+      This job is managed by https://github.com/innovation-sre/scale-ci-pipeline
     disabled: false
     name: ATS-SCALE-CI-OCP-OSP-DEPLOY
     node: jetpack
