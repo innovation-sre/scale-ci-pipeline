@@ -269,6 +269,7 @@
         branches:
         - '*/master'
         url: https://github.com/innovation-sre/workloads.git
+        credentials-id: GITHUB_REPO
     triggers: []
     wrappers:
     - workspace-cleanup:

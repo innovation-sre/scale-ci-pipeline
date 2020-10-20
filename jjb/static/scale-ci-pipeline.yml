@@ -123,6 +123,7 @@
           branches:
           - '*/master'
           url: https://github.com/innovation-sre/scale-ci-pipeline.git
+          credentials-id: GITHUB_REPO
           wipe-workspace: true
       script-path: Jenkinsfile
     project-type: pipeline

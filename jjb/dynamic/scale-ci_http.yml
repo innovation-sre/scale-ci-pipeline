@@ -277,6 +277,7 @@
         branches:
         - '*/master'
         url: https://github.com/innovation-sre/e2e-benchmarking.git
+        credentials-id: GITHUB_REPO
     triggers: []
     wrappers:
     - workspace-cleanup:
