@@ -248,7 +248,7 @@
         name: HPA_CLEANUP
     # other vars
     - string:
-        default: "ibm_cloud"
+        default: ""
         description: ""
         name: OCP_CLUSTER_ENV
     
