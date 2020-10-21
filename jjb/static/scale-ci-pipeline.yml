@@ -3,7 +3,7 @@
     description: 'Collection of Jenkins jobs to install, configure, scaleup ocp and run various performance and scale
       tests on OpenShift across various public and private clouds. '
     disabled: false
-    name: SCALE-CI-PIPELINE
+    name: 00-SCALE-CI-PIPELINE
     parameters:
     - bool:
         default: false
@@ -46,7 +46,7 @@
         description: ''
         name: NS_PER_CLUSTER
     - string:
-        default: 'scale-ci'
+        default: ''
         description: ''
         name: NODE_LABEL
     - password:
