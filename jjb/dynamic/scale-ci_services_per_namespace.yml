@@ -5,7 +5,7 @@
     - shell: |+
         set -o pipefail
         set -eux
-
+        env
         # get perf keys to access orchestration host and set ssh session options
         export PUBLIC_KEY=${WORKSPACE}/id_rsa.pub
         ssh-keygen -y -f ${PRIVATE_KEY} > $PUBLIC_KEY

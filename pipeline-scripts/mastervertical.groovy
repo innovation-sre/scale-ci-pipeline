@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def mastervertical = MASTERVERTICAL_SCALE_TEST.toString().toUpperCase()
 def property_file_name = "mastervert.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run mastervert test
@@ -78,6 +79,8 @@ stage('mastervertical_scale_test') {
 						[$class: 'StringParameterValue', name: 'ES_HOST', value: es_host ],
 						[$class: 'StringParameterValue', name: 'ES_PORT', value: es_port ],
 						[$class: 'StringParameterValue', name: 'ES_INDEX_PREFIX', value: es_index_prefix ],
+						[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+						[$class: 'StringParameterValue', name: 'API_URL', value: api_url],
 						[$class: 'StringParameterValue', name: 'EXPECTED_MASTERVERTICAL_DURATION', value: mastervertical_expected_duration ]]
 			} catch ( Exception e) {
 				echo "MASTERVERTICAL SCALE TEST Job failed with the following error: "

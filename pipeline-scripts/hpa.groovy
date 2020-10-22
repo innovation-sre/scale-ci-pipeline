@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def hpa = HPA.toString().toUpperCase()
 def property_file_name = "hpa.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run hpa scalability  test
@@ -117,6 +118,8 @@ stage ('hpa_scale_test') {
 				[$class: 'StringParameterValue', name: 'HPA_STEPSIZE', value: hpa_stepsize],
 				[$class: 'StringParameterValue', name: 'HPA_PAUSE', value: hpa_pause],
 				[$class: 'StringParameterValue', name: 'HPA_DESCRIPTION', value: hpa_description],
+				[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+				[$class: 'StringParameterValue', name: 'API_URL', value: api_url],
 				[$class: 'StringParameterValue', name: 'HPA_NODESELECTOR', value: hpa_nodeselector]]
 
 			} catch ( Exception e) {

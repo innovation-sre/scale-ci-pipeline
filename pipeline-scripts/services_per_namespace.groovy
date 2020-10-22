@@ -4,7 +4,8 @@ def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def services_per_namespace = SERVICES_PER_NAMESPACE.toString().toUpperCase()
 def property_file_name = "services_per_namespace.properties"
-
+def token = TOKEN.toString()
+def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"
 
 // run services_per_namespace scale test
@@ -80,6 +81,8 @@ stage ('ATS-SCALE-CI-SERVICES-PER-NAMESPACE') {
 						[$class: 'StringParameterValue', name: 'ES_HOST', value: es_host ],
 						[$class: 'StringParameterValue', name: 'ES_PORT', value: es_port ],
 						[$class: 'StringParameterValue', name: 'ES_INDEX_PREFIX', value: es_index_prefix ],
+						[$class: 'StringParameterValue', name: 'TOKEN', value: token],
+						[$class: 'StringParameterValue', name: 'API_URL', value: api_url],
 						[$class: 'StringParameterValue', name: 'EXPECTED_SERVICES_PER_NAMESPACE_DURATION', value: expected_services_per_namespace_duration ]]
 			} catch ( Exception e) {
 				echo "ATS-SCALE-CI-SERVICES-PER-NAMESPACE Job failed with the following error: "
