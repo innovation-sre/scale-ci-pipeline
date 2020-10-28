@@ -24,8 +24,7 @@
         export KUBECONFIG=${WORKSPACE}/kubeconfig
 
         # run tests
-        pushd workloads/router-perf/
-        ./run_router_test.sh
+        ./workloads/router-perf/run_router_test.sh
     concurrent: true
     description: |
       This test is a data-plane workload generator that runs http requests through HAProxy into deployed pods.
