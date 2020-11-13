@@ -9,7 +9,7 @@
         # get perf keys to access orchestration host and set ssh session options
         export PUBLIC_KEY=${WORKSPACE}/id_rsa.pub
         ls -alF ${PRIVATE_KEY}
-#        sudo ssh-keygen -y -f ${PRIVATE_KEY} > $PUBLIC_KEY
+        # sudo ssh-keygen -y -f ${PRIVATE_KEY} > $PUBLIC_KEY
         export OPTIONS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=1200"
         chmod 600 ${PRIVATE_KEY}
 
