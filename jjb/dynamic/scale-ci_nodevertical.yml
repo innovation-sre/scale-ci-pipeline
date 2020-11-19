@@ -5,6 +5,7 @@
     - shell: |+
         #set -o pipefail
         set -eux
+        export LC_CTYPE=en_US.UTF-8
 
         # pick up ansible in case python binaries are installed under /usr/local/bin
         export PATH="$PATH:/usr/local/bin"
