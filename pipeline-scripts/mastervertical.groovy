@@ -3,7 +3,7 @@
 def pipeline_id = env.BUILD_ID
 def node_label = NODE_LABEL.toString()
 def mastervertical = MASTERVERTICAL_SCALE_TEST.toString().toUpperCase()
-def property_file_name = "mastervert.properties"
+def property_file_name = "mastervertical.properties"
 def token = TOKEN.toString()
 def api_url = API_URL.toString()
 println "Current pipeline job build id is '${pipeline_id}'"

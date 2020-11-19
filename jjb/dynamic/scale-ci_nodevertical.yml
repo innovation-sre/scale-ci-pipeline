@@ -89,7 +89,7 @@
         description: Elasticsearch server index prefix (currently used by snafu). (defaults to snafu through the workloads repo)
         name: ES_INDEX_PREFIX
     - string:
-        default: "67.228.213.232"
+        default: ""
         description: The machine intended to run the oc commands and launch the workload.
         name: ORCHESTRATION_HOST
     - string:
