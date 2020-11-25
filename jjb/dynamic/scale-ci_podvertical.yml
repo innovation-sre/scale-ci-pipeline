@@ -57,6 +57,9 @@
           fi
         done
 
+        # get workload report
+        ansible-playbook -vv -i inventory --extra-vars "playbook_vars_file=podvertical.yml" workloads/generate_report.yml
+
         # status
         oc get job -n scale-ci-tooling scale-ci-podvertical -o json | jq -e '.status.succeeded==1'
     concurrent: true
@@ -224,7 +227,15 @@
           <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
           <paramsToUseForLimit />
           </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    publishers: []
+    publishers: 
+    - archive:
+        artifacts: 'reports/*.png'
+    - image-gallery:
+        - gallery-type: archived-images-gallery
+          title: 'Workload Report: $JOB_NAME'
+          includes: "reports/*.png"
+          image-width: 400
+          unstable-if-no-artifacts: false
     scm:
     - git:
         branches:
