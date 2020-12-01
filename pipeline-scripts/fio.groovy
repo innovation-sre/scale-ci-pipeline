@@ -31,6 +31,7 @@ stage ('fio_scale_test') {
 			def workload_job_node_selector = fio_properties['WORKLOAD_JOB_NODE_SELECTOR']
 			def workload_job_taint = fio_properties['WORKLOAD_JOB_TAINT']
 			def workload_job_privileged = fio_properties['WORKLOAD_JOB_PRIVILEGED']
+			def workload_anti_affinity = fio_properties['WORKLOAD_ANTI_AFFINITY']
 			def kubeconfig_file = fio_properties['KUBECONFIG_FILE']
 			def pbench_instrumentation = fio_properties['PBENCH_INSTRUMENTATION']
 			def enable_pbench_agents = fio_properties['ENABLE_PBENCH_AGENTS']
@@ -77,6 +78,7 @@ stage ('fio_scale_test') {
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_NODE_SELECTOR', value: Boolean.valueOf(workload_job_node_selector) ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_TAINT', value: Boolean.valueOf(workload_job_taint)  ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_PRIVILEGED', value: Boolean.valueOf(workload_job_privileged)  ],
+				[$class: 'BooleanParameterValue', name: 'WORKLOAD_ANTI_AFFINITY', value: Boolean.valueOf(workload_anti_affinity)  ],
 				[$class: 'StringParameterValue', name: 'KUBECONFIG_FILE', value: kubeconfig_file ],
 				[$class: 'BooleanParameterValue', name: 'PBENCH_INSTRUMENTATION', value: Boolean.valueOf(pbench_instrumentation)  ],
 				[$class: 'BooleanParameterValue', name: 'ENABLE_PBENCH_AGENTS', value: Boolean.valueOf(enable_pbench_agents)  ],
