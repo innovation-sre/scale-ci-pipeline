@@ -104,6 +104,10 @@
         default: ""
         description: Workload Node Selector for FIO Jobs
         name: WORKLOAD_NODESELECTOR
+    - string:
+        default: "libaio"
+        description: Linux native asynchronous IO engine (libaio).
+        name: FIOTEST_ENGINE
     - bool:
         default: false
         description: Enables/disables the node selector that places the workload job on the 'pbench' node.
@@ -204,6 +208,10 @@
         default: true
         description: From 'man fio' - If  value  is  true,  use  non-buffered  I/O. This is usually O_DIRECT.
         name: FIOTEST_DIRECT
+    - bool:
+        default: true
+        description: This causes flushing of dirty data to disk at the end of test. The flush time is included in the measurement.
+        name: FIOTEST_END_FSYNC
     - string:
         default: 60
         description: FIO test runtime

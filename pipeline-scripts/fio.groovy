@@ -61,7 +61,9 @@ stage ('fio_scale_test') {
 			def fiotest_filename = fio_properties['FIOTEST_FILENAME']
 			def fiotest_filesize = fio_properties['FIOTEST_FILESIZE']
 			def fiotest_direct = fio_properties['FIOTEST_DIRECT']
+			def fiotest_end_fsync = fio_properties['FIOTEST_END_FSYNC']
 			def fiotest_runtime = fio_properties['FIOTEST_RUNTIME']
+			def fiotest_engine = fio_properties['FIOTEST_ENGINE']
 			def fiotest_iodepth = fio_properties['FIOTEST_IODEPTH']
 			def fiotest_testtype = fio_properties['FIOTEST_TESTTYPE']
 			def fiotest_samples = fio_properties['FIOTEST_SAMPLES']
@@ -81,6 +83,7 @@ stage ('fio_scale_test') {
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_TAINT', value: Boolean.valueOf(workload_job_taint)  ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_PRIVILEGED', value: Boolean.valueOf(workload_job_privileged)  ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_ANTI_AFFINITY', value: Boolean.valueOf(workload_anti_affinity)  ],
+				[$class: 'StringParameterValue', name: 'FIOTEST_ENGINE', value: fiotest_engine ],
 				[$class: 'StringParameterValue', name: 'KUBECONFIG_FILE', value: kubeconfig_file ],
 				[$class: 'BooleanParameterValue', name: 'PBENCH_INSTRUMENTATION', value: Boolean.valueOf(pbench_instrumentation)  ],
 				[$class: 'BooleanParameterValue', name: 'ENABLE_PBENCH_AGENTS', value: Boolean.valueOf(enable_pbench_agents)  ],
@@ -103,7 +106,9 @@ stage ('fio_scale_test') {
 				[$class: 'StringParameterValue', name: 'FIOTEST_BS', value: fiotest_bs],
 				[$class: 'StringParameterValue', name: 'FIOTEST_FILENAME', value: fiotest_filename],
 				[$class: 'StringParameterValue', name: 'FIOTEST_FILESIZE', value: fiotest_filesize],
+
 				[$class: 'BooleanParameterValue', name: 'FIOTEST_DIRECT', value: Boolean.valueOf(fiotest_direct)],
+				[$class: 'BooleanParameterValue', name: 'FIOTEST_END_FSYNC', value: Boolean.valueOf(fiotest_end_fsync)],
 				[$class: 'StringParameterValue', name: 'FIOTEST_RUNTIME', value: fiotest_runtime],
 				[$class: 'StringParameterValue', name: 'FIOTEST_IODEPTH', value: fiotest_iodepth],
 				[$class: 'StringParameterValue', name: 'FIOTEST_TESTTYPE', value: fiotest_testtype],
