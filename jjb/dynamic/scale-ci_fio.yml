@@ -100,6 +100,10 @@
         default: "quay.io/openshift-scale/scale-ci-workload"
         description: Container image that runs the workload script.
         name: WORKLOAD_IMAGE
+    - string:
+        default: ""
+        description: Workload Node Selector for FIO Jobs
+        name: WORKLOAD_NODESELECTOR
     - bool:
         default: false
         description: Enables/disables the node selector that places the workload job on the 'pbench' node.

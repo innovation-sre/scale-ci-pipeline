@@ -32,6 +32,7 @@ stage ('fio_scale_test') {
 			def workload_job_taint = fio_properties['WORKLOAD_JOB_TAINT']
 			def workload_job_privileged = fio_properties['WORKLOAD_JOB_PRIVILEGED']
 			def workload_anti_affinity = fio_properties['WORKLOAD_ANTI_AFFINITY']
+			def workload_nodeselector = fio_properties['WORKLOAD_NODESELECTOR']
 			def kubeconfig_file = fio_properties['KUBECONFIG_FILE']
 			def pbench_instrumentation = fio_properties['PBENCH_INSTRUMENTATION']
 			def enable_pbench_agents = fio_properties['ENABLE_PBENCH_AGENTS']
@@ -75,6 +76,7 @@ stage ('fio_scale_test') {
 				[$class: 'StringParameterValue', name: 'ORCHESTRATION_HOST', value: orchestration_host],
 				[$class: 'StringParameterValue', name: 'ORCHESTRATION_USER', value: orchestration_user],
 				[$class: 'StringParameterValue', name: 'WORKLOAD_IMAGE', value: workload_image ],
+				[$class: 'StringParameterValue', name: 'WORKLOAD_NODESELECTOR', value: workload_nodeselector ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_NODE_SELECTOR', value: Boolean.valueOf(workload_job_node_selector) ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_TAINT', value: Boolean.valueOf(workload_job_taint)  ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_PRIVILEGED', value: Boolean.valueOf(workload_job_privileged)  ],
