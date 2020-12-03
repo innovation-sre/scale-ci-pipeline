@@ -117,6 +117,10 @@
         description: Enables minimal mode on FIO tests
         name: FIOTEST_MINIMAL
     - bool:
+        default: true
+        description: Enables anti-affinity for the pods
+        name: WORKLOAD_ANTI_AFFINITY
+    - bool:
         default: false
         description: Enables/disables the toleration on the workload job to permit the 'controller' taint.
         name: WORKLOAD_JOB_TAINT
