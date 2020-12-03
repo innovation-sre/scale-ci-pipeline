@@ -28,6 +28,21 @@
 
         # run tests
         ./workloads/router-perf/run_router_test.sh
+
+        # check job success
+        exitCode=$?
+        
+        # get workload report
+        ansible-playbook -vvv -i inventory --extra-vars "playbook_vars_file=http.yml" workloads/generate_report.yml
+        
+        # if success then exit 0 else exit $exitCode
+        if [[ ${exitCode} -eq '0' ]]; then
+            echo "Job was successful"
+            exit ${exitCode}
+        else
+            echo "Job failed"
+            exit ${exitCode}
+        fi
     concurrent: true
     description: |
       This test is a data-plane workload generator that runs http requests through HAProxy into deployed pods.
@@ -273,7 +288,15 @@
           <limitOneJobWithMatchingParams>false</limitOneJobWithMatchingParams>
           <paramsToUseForLimit />
           </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
-    publishers: []
+    publishers: 
+    - archive:
+        artifacts: 'reports/*.png'
+    - image-gallery:
+        - gallery-type: archived-images-gallery
+          title: 'Workload Report: $JOB_NAME'
+          includes: "reports/*.png"
+          image-width: 400
+          unstable-if-no-artifacts: false
     scm:
     - git:
         branches:
