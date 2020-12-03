@@ -61,6 +61,7 @@ stage ('fio_scale_test') {
 			def fiotest_filename = fio_properties['FIOTEST_FILENAME']
 			def fiotest_filesize = fio_properties['FIOTEST_FILESIZE']
 			def fiotest_direct = fio_properties['FIOTEST_DIRECT']
+			def fiotest_minimal = fio_properties['FIOTEST_MINIMAL']
 			def fiotest_end_fsync = fio_properties['FIOTEST_END_FSYNC']
 			def fiotest_runtime = fio_properties['FIOTEST_RUNTIME']
 			def fiotest_engine = fio_properties['FIOTEST_ENGINE']
@@ -84,6 +85,7 @@ stage ('fio_scale_test') {
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_PRIVILEGED', value: Boolean.valueOf(workload_job_privileged)  ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_ANTI_AFFINITY', value: Boolean.valueOf(workload_anti_affinity)  ],
 				[$class: 'StringParameterValue', name: 'FIOTEST_ENGINE', value: fiotest_engine ],
+				[$class: 'BooleanParameterValue', name: 'FIOTEST_MINIMAL', value: Boolean.valueOf(fiotest_minimal)  ],
 				[$class: 'StringParameterValue', name: 'KUBECONFIG_FILE', value: kubeconfig_file ],
 				[$class: 'BooleanParameterValue', name: 'PBENCH_INSTRUMENTATION', value: Boolean.valueOf(pbench_instrumentation)  ],
 				[$class: 'BooleanParameterValue', name: 'ENABLE_PBENCH_AGENTS', value: Boolean.valueOf(enable_pbench_agents)  ],

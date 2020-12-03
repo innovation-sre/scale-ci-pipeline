@@ -114,6 +114,10 @@
         name: WORKLOAD_JOB_NODE_SELECTOR
     - bool:
         default: false
+        description: Enables minimal mode on FIO tests
+        name: FIOTEST_MINIMAL
+    - bool:
+        default: false
         description: Enables/disables the toleration on the workload job to permit the 'controller' taint.
         name: WORKLOAD_JOB_TAINT
     - bool:
