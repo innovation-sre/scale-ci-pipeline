@@ -233,6 +233,14 @@
         description: Number of nodes to test FIO on
         name: FIOTEST_MAX_NODES
     - string:
+        default: 1
+        description: Number of pods per fio job
+        name: FIOTEST_COMPLETIONS_PER_JOB
+    - string:
+        default: 1
+        description: Number of pods to run in parallel
+        name: FIOTEST_PARALLELISM
+    - string:
         default: "read"
         description: "FIO test type to execute. Default is 'read', supported are : read,write,randread,randwrite,randrw,rw"
         name: FIOTEST_TESTTYPE

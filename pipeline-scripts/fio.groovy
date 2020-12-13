@@ -51,6 +51,9 @@ stage ('fio_scale_test') {
 			def fiotest_cleanup = fio_properties['FIOTEST_CLEANUP']
 			def fiotest_basename = fio_properties['FIOTEST_BASENAME']
 			def fiotest_maxpods = fio_properties['FIOTEST_MAXPODS']
+			def fiotest_max_nodes = fio_properties['FIOTEST_MAX_NODES']
+			def fiotest_completions_per_job = fio_properties['FIOTEST_COMPLETIONS_PER_JOB']
+			def fiotest_parallelism = fio_properties['FIOTEST_PARALLELISM']
 			def fiotest_pod_image = fio_properties['FIOTEST_POD_IMAGE']
 			def fiotest_engine = fio_properties['FIOTEST_ENGINE']
 			def fiotest_pause = fio_properties['FIOTEST_PAUSE']
@@ -99,6 +102,9 @@ stage ('fio_scale_test') {
 				[$class: 'BooleanParameterValue', name: 'FIOTEST_CLEANUP', value: Boolean.valueOf(fiotest_cleanup)],
 				[$class: 'StringParameterValue', name: 'FIOTEST_BASENAME', value: fiotest_basename],
 				[$class: 'StringParameterValue', name: 'FIOTEST_MAXPODS', value: fiotest_maxpods],
+				[$class: 'StringParameterValue', name: 'FIOTEST_MAX_NODES', value: fiotest_max_nodes ],
+				[$class: 'StringParameterValue', name: 'FIOTEST_PARALLELISM', value: fiotest_parallelism ],
+				[$class: 'StringParameterValue', name: 'FIOTEST_COMPLETIONS_PER_JOB', value: fiotest_completions_per_job ],
 				[$class: 'StringParameterValue', name: 'FIOTEST_POD_IMAGE', value: fiotest_pod_image],
 				[$class: 'StringParameterValue', name: 'FIOTEST_PAUSE', value: fiotest_pause],
 				[$class: 'StringParameterValue', name: 'FIOTEST_STEPSIZE', value: fiotest_stepsize],
