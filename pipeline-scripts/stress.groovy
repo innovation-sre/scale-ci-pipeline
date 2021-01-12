@@ -51,6 +51,8 @@ stage ('stress_scale_test') {
 			def stress_container_image = stress_properties['STRESS_CONTAINER_IMAGE']
 			def stress_runtime = stress_properties['STRESS_RUNTIME']
 			def stress_nodeselector = stress_properties['STRESS_NODESELECTOR']
+			def stress_parallelism = stress_properties['STRESS_PARALLELISM']
+			def stress_completions = stress_properties['STRESS_COMPLETIONS']
 			def stress_cpu = stress_properties['STRESS_CPU']
 			def stress_cpu_load = stress_properties['STRESS_CPU_LOAD']
 			def stress_io = stress_properties['STRESS_IO']
@@ -71,6 +73,8 @@ stage ('stress_scale_test') {
 				[$class: 'StringParameterValue', name: 'ORCHESTRATION_HOST', value: orchestration_host],
 				[$class: 'StringParameterValue', name: 'ORCHESTRATION_USER', value: orchestration_user],
 				[$class: 'StringParameterValue', name: 'WORKLOAD_IMAGE', value: workload_image ],
+				[$class: 'StringParameterValue', name: 'STRESS_PARALLELISM', value: stress_parallelism ],
+				[$class: 'StringParameterValue', name: 'STRESS_COMPLETIONS', value: stress_completions ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_NODE_SELECTOR', value: Boolean.valueOf(workload_job_node_selector) ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_TAINT', value: Boolean.valueOf(workload_job_taint)  ],
 				[$class: 'BooleanParameterValue', name: 'WORKLOAD_JOB_PRIVILEGED', value: Boolean.valueOf(workload_job_privileged)  ],

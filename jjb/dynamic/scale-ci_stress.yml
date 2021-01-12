@@ -189,6 +189,14 @@
         default: 5
         description: start N workers creating multiple daemons
         name: STRESS_DAEMONS
+    - string:
+        default: 6
+        description: Number of pods to run in parallel
+        name: STRESS_PARALLELISM
+    - string:
+        default: 24
+        description: Number of completions in total
+        name: STRESS_COMPLETIONS
     - bool:
         default: true
         description: If set to 'true' test project will be removed at end of test.
